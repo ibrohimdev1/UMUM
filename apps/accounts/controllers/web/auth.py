@@ -38,7 +38,19 @@ class LoginView(View):
         if social in ['google', 'facebook', 'apple']:
             social_name = social.capitalize()
             email = request.GET.get('email', '').strip().lower() or f"{social}.user@umum.uz"
-            name = request.GET.get('name', '').strip() or f"{social_name} Foydalanuvchisi"
+            raw_name = request.GET.get('name', '').strip()
+
+            # Smart formatting of full name (Ism va familiya)
+            if not raw_name or raw_name == email.split('@')[0] or raw_name == f"{social_name} Foydalanuvchisi":
+                import re
+                clean_prefix = re.sub(r'\d+$', '', email.split('@')[0])
+                words = clean_prefix.replace('.', ' ').replace('_', ' ').split()
+                if words:
+                    name = ' '.join(w.capitalize() for w in words)
+                else:
+                    name = f"{social_name} Foydalanuvchisi"
+            else:
+                name = raw_name
 
             # Check if an account already exists with this email
             user = User.objects.filter(email__iexact=email).first()
@@ -53,10 +65,10 @@ class LoginView(View):
                     full_name=name,
                     status=User.Status.ACTIVE
                 )
-                messages.success(request, f"Xush kelibsiz! Siz {social_name} ({email}) orqali muvaffaqiyatli ro‘yxatdan o‘tdingiz.")
+                messages.success(request, f"Xush kelibsiz! Siz {social_name} ({name}) orqali muvaffaqiyatli ro‘yxatdan o‘tdingiz.")
             else:
-                # 2. LOGIN existing user via Social/Google
-                if name and not user.full_name:
+                # 2. LOGIN existing user via Social/Google - update full_name with real name
+                if name and (not user.full_name or user.full_name.strip() == '' or user.full_name == email.split('@')[0] or user.full_name == f"{social_name} Foydalanuvchisi" or user.full_name != name):
                     user.full_name = name
                     user.save(update_fields=['full_name'])
                 messages.success(request, f"Xush kelibsiz, {user.full_name or user.email}! {social_name} orqali hisobingizga kirdingiz.")
@@ -192,7 +204,24 @@ class GoogleCallbackView(View):
                 return redirect('auth_login')
 
             email = user_info['email'].lower()
-            name = user_info.get('name', 'Google Foydalanuvchisi')
+
+            # Google account'dan foydalanuvchining to'liq ism va familiyasini olish
+            google_name = (user_info.get('name') or '').strip()
+            given_name = (user_info.get('given_name') or '').strip()
+            family_name = (user_info.get('family_name') or '').strip()
+
+            if not google_name and (given_name or family_name):
+                google_name = f"{given_name} {family_name}".strip()
+
+            # Agar Google ism bermasa yoki faqat email prefiksi bo'lsa, chiroyli formatlash
+            if not google_name or google_name.lower() == email.split('@')[0].lower():
+                import re
+                clean_prefix = re.sub(r'\d+$', '', email.split('@')[0])
+                words = clean_prefix.replace('.', ' ').replace('_', ' ').split()
+                if words:
+                    google_name = ' '.join(w.capitalize() for w in words)
+                else:
+                    google_name = email.split('@')[0].capitalize()
 
             # Find or auto-register user
             user = User.objects.filter(email__iexact=email).first()
@@ -203,11 +232,15 @@ class GoogleCallbackView(View):
                 user = User.objects.create_user(
                     phone=dummy_phone,
                     email=email,
-                    full_name=name,
+                    full_name=google_name,
                     status=User.Status.ACTIVE
                 )
-                messages.success(request, f"Xush kelibsiz! Google ({email}) orqali ro‘yxatdan o‘tdingiz.")
+                messages.success(request, f"Xush kelibsiz! Google ({google_name}) orqali ro‘yxatdan o‘tdingiz.")
             else:
+                # Foydalanuvchi avval ro'yxatdan o'tgan bo'lsa ham, Google'dagi haqiqiy ism-familiyasini yangilash
+                if google_name and (not user.full_name or user.full_name.strip() == '' or user.full_name == email.split('@')[0] or user.full_name == 'Google Foydalanuvchisi' or user.full_name != google_name):
+                    user.full_name = google_name
+                    user.save(update_fields=['full_name'])
                 messages.success(request, f"Xush kelibsiz, {user.full_name or user.email}! Google orqali hisobingizga kirdingiz.")
 
             login(request, user)

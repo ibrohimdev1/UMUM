@@ -398,8 +398,9 @@
         const email = prompt("Google (Gmail) manzilingizni kiriting:", "");
         if (email && email.trim() && email.includes('@')) {
             const cleanEmail = email.trim().toLowerCase();
-            const defaultName = cleanEmail.split('@')[0].replace('.', ' ');
-            const name = prompt("Ism va familiyangizni kiriting:", defaultName) || defaultName;
+            const prefix = cleanEmail.split('@')[0].replace(/\d+$/, '').replace(/[._]/g, ' ').trim();
+            const defaultName = prefix.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || "Ibrohim Hasanov";
+            const name = prompt("To‘liq ism va familiyangizni kiriting (Google hisobingizdagidek):", defaultName) || defaultName;
             window.location.href = `?social=google&email=${encodeURIComponent(cleanEmail)}&name=${encodeURIComponent(name)}{% if next %}&next={{ next }}{% endif %}`;
         } else if (email) {
             alert("Iltimos, to‘g‘ri elektron pochta manzilini kiriting (masalan: misol@gmail.com).");
