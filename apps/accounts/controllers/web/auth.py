@@ -157,7 +157,8 @@ class GoogleLoginView(View):
     """
     def get(self, request):
         if GoogleAuthService.is_configured():
-            auth_url = GoogleAuthService.get_authorization_url(request)
+            auth_url, redirect_uri = GoogleAuthService.get_authorization_url(request)
+            request.session['google_oauth_redirect_uri'] = redirect_uri
             return redirect(auth_url)
         # If not configured with Google Cloud yet, trigger the account selector
         return redirect('/auth/login/?open_google=1')
@@ -169,12 +170,23 @@ class GoogleCallbackView(View):
     def get(self, request):
         code = request.GET.get('code')
         error = request.GET.get('error')
+        error_desc = request.GET.get('error_description')
+
         if error or not code:
-            messages.error(request, "Google orqali kirish bekor qilindi yoki xatolik yuz berdi.")
+            if error == 'access_denied':
+                messages.error(
+                    request,
+                    "Google ruxsat bermadi (access_denied). "
+                    "Ilovangiz Google Cloud'da 'Testing' holatida bo‘lgani uchun "
+                    "Audience bo‘limida emailingizni 'Test users' ro‘yxatiga qo‘shing yoki ilovani 'Publish' qiling."
+                )
+            else:
+                messages.error(request, f"Google orqali kirish bekor qilindi yoki xatolik: {error_desc or error or 'Kod topilmadi'}")
             return redirect('auth_login')
 
         try:
-            user_info = GoogleAuthService.exchange_code_for_user_info(code, request)
+            redirect_uri = request.session.get('google_oauth_redirect_uri') or GoogleAuthService.get_redirect_uri(request)
+            user_info = GoogleAuthService.exchange_code_for_user_info(code, redirect_uri)
             if not user_info or not user_info.get('email'):
                 messages.error(request, "Google profil ma’lumotlarini olishda xatolik yuz berdi.")
                 return redirect('auth_login')
