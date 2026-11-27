@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from apps.accounts.forms.auth_forms import OTPVerifyForm
 from apps.accounts.services.auth_service import AuthService
+from apps.accounts.services.google_auth import GoogleAuthService
 
 User = get_user_model()
 
@@ -32,27 +33,42 @@ class LoginView(View):
         if request.user.is_authenticated:
             return redirect('home')
 
-        # One-click Social Demo Logins
+        # One-click Social Logins with specific account data
         social = request.GET.get('social')
         if social in ['google', 'facebook', 'apple']:
             social_name = social.capitalize()
-            dummy_phone = f"+99899{abs(hash(social)) % 9000000 + 1000000}"
-            user, _ = User.objects.get_or_create(
-                phone=dummy_phone,
-                defaults={
-                    'full_name': f"{social_name} Foydalanuvchisi",
-                    'email': f"{social}.user@umum.uz",
-                    'status': User.Status.ACTIVE
-                }
-            )
+            email = request.GET.get('email', '').strip().lower() or f"{social}.user@umum.uz"
+            name = request.GET.get('name', '').strip() or f"{social_name} Foydalanuvchisi"
+
+            # Check if an account already exists with this email
+            user = User.objects.filter(email__iexact=email).first()
+            if not user:
+                # 1. AUTO-REGISTER new user via Social/Google
+                dummy_phone = f"+99899{abs(hash(email)) % 9000000 + 1000000}"
+                while User.objects.filter(phone=dummy_phone).exists():
+                    dummy_phone = f"+99899{abs(hash(dummy_phone + 'g')) % 9000000 + 1000000}"
+                user = User.objects.create_user(
+                    phone=dummy_phone,
+                    email=email,
+                    full_name=name,
+                    status=User.Status.ACTIVE
+                )
+                messages.success(request, f"Xush kelibsiz! Siz {social_name} ({email}) orqali muvaffaqiyatli ro‘yxatdan o‘tdingiz.")
+            else:
+                # 2. LOGIN existing user via Social/Google
+                if name and not user.full_name:
+                    user.full_name = name
+                    user.save(update_fields=['full_name'])
+                messages.success(request, f"Xush kelibsiz, {user.full_name or user.email}! {social_name} orqali hisobingizga kirdingiz.")
+
             login(request, user)
-            messages.success(request, f"{social_name} orqali tizimga kirdingiz!")
             next_url = request.GET.get('next')
             return redirect(next_url or 'home')
 
         return render(request, self.template_name, {
             'next': request.GET.get('next', ''),
-            'tab': request.GET.get('tab', 'login')
+            'tab': request.GET.get('tab', 'login'),
+            'google_configured': GoogleAuthService.is_configured()
         })
 
     def post(self, request):
@@ -133,6 +149,60 @@ class LoginView(View):
         else:
             messages.error(request, "Elektron pochta/telefon yoki parol noto‘g‘ri kiritildi.")
             return render(request, self.template_name, {'identifier': identifier, 'tab': 'login'})
+
+class GoogleLoginView(View):
+    """
+    Initiates Google OAuth 2.0 flow if configured in .env,
+    otherwise renders the interactive Google account chooser dialog.
+    """
+    def get(self, request):
+        if GoogleAuthService.is_configured():
+            auth_url = GoogleAuthService.get_authorization_url(request)
+            return redirect(auth_url)
+        # If not configured with Google Cloud yet, trigger the account selector
+        return redirect('/auth/login/?open_google=1')
+
+class GoogleCallbackView(View):
+    """
+    Handles redirect callback from Google OAuth 2.0 servers.
+    """
+    def get(self, request):
+        code = request.GET.get('code')
+        error = request.GET.get('error')
+        if error or not code:
+            messages.error(request, "Google orqali kirish bekor qilindi yoki xatolik yuz berdi.")
+            return redirect('auth_login')
+
+        try:
+            user_info = GoogleAuthService.exchange_code_for_user_info(code, request)
+            if not user_info or not user_info.get('email'):
+                messages.error(request, "Google profil ma’lumotlarini olishda xatolik yuz berdi.")
+                return redirect('auth_login')
+
+            email = user_info['email'].lower()
+            name = user_info.get('name', 'Google Foydalanuvchisi')
+
+            # Find or auto-register user
+            user = User.objects.filter(email__iexact=email).first()
+            if not user:
+                dummy_phone = f"+99899{abs(hash(email)) % 9000000 + 1000000}"
+                while User.objects.filter(phone=dummy_phone).exists():
+                    dummy_phone = f"+99899{abs(hash(dummy_phone + 'g')) % 9000000 + 1000000}"
+                user = User.objects.create_user(
+                    phone=dummy_phone,
+                    email=email,
+                    full_name=name,
+                    status=User.Status.ACTIVE
+                )
+                messages.success(request, f"Xush kelibsiz! Google ({email}) orqali ro‘yxatdan o‘tdingiz.")
+            else:
+                messages.success(request, f"Xush kelibsiz, {user.full_name or user.email}! Google orqali hisobingizga kirdingiz.")
+
+            login(request, user)
+            return redirect('home')
+        except Exception as e:
+            messages.error(request, f"Google tizimi bilan aloqada xatolik: {e}")
+            return redirect('auth_login')
 
 class VerifyOTPView(View):
     template_name = 'accounts/verify.html'
