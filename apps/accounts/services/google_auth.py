@@ -15,8 +15,6 @@ class GoogleAuthService:
 
     @classmethod
     def get_redirect_uri(cls, request=None):
-        if request:
-            return request.build_absolute_uri('/auth/google/callback/')
         return 'http://127.0.0.1:8000/auth/google/callback/'
 
     @classmethod
@@ -59,8 +57,16 @@ class GoogleAuthService:
             data=payload,
             headers={'Content-Type': 'application/x-www-form-urlencoded'}
         )
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            token_data = json.loads(resp.read().decode('utf-8'))
+        try:
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                token_data = json.loads(resp.read().decode('utf-8'))
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode('utf-8')
+            print(f"GOOGLE TOKEN ERROR: {e.code} - {err_body}")
+            raise Exception(f"Google Token xatosi: {err_body}")
+        except Exception as e:
+            print(f"GOOGLE REQUEST ERROR: {e}")
+            raise e
 
         access_token = token_data.get('access_token')
         if not access_token:
@@ -69,5 +75,10 @@ class GoogleAuthService:
         # Fetch profile information from Google
         userinfo_url = f"https://www.googleapis.com/oauth2/v3/userinfo?access_token={access_token}"
         req_info = urllib.request.Request(userinfo_url)
-        with urllib.request.urlopen(req_info, timeout=12) as resp:
-            return json.loads(resp.read().decode('utf-8'))
+        try:
+            with urllib.request.urlopen(req_info, timeout=12) as resp:
+                return json.loads(resp.read().decode('utf-8'))
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode('utf-8')
+            print(f"GOOGLE USERINFO ERROR: {e.code} - {err_body}")
+            raise Exception(f"Google Userinfo xatosi: {err_body}")
