@@ -1,0 +1,38 @@
+<div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden listing-card transition-hover">
+    <div class="position-relative">
+        <!-- AKSIYA (Promo Ticket Badge) -->
+        {% include 'components/aksiya_badge.html' %}
+
+        <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none">
+            <img src="{{ listing.primary_image_url }}" class="card-img-top listing-img-thumb" alt="{{ listing.title }}" onerror="this.src='/static/images/no-image.svg'">
+        </a>
+        <span class="badge bg-primary position-absolute bottom-0 start-0 m-2 px-2 py-1 fs-7 shadow-sm">
+            {{ listing.category.name }}
+        </span>
+        {% if user.is_authenticated %}
+            <form action="{% url 'favorite_toggle' listing.id %}" method="post" class="position-absolute top-0 end-0 m-2" style="z-index: 6;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-light rounded-circle shadow-sm p-2 text-danger">
+                    <i class="fas fa-heart"></i>
+                </button>
+            </form>
+        {% endif %}
+    </div>
+    <div class="card-body p-3 d-flex flex-column">
+        {% if listing.old_price %}
+            <div class="d-flex align-items-baseline gap-2 mb-1 flex-wrap">
+                <h5 class="fw-bold text-primary mb-0">{{ listing.price|floatformat:0 }} UZS</h5>
+                <span class="text-decoration-line-through text-muted small">{{ listing.old_price|floatformat:0 }} UZS</span>
+            </div>
+        {% else %}
+            <h5 class="fw-bold text-primary mb-1">{{ listing.price|floatformat:0 }} UZS</h5>
+        {% endif %}
+        <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none text-dark">
+            <h6 class="card-title fw-semibold text-truncate mb-2" title="{{ listing.title }}">{{ listing.title }}</h6>
+        </a>
+        <div class="mt-auto d-flex justify-content-between text-secondary small pt-2 border-top">
+            <span><i class="fas fa-map-marker-alt me-1 text-danger"></i>{{ listing.city|default:'O‘zbekiston' }}</span>
+            <span><i class="far fa-clock me-1"></i>{{ listing.created_at|date:"d M" }}</span>
+        </div>
+    </div>
+</div>

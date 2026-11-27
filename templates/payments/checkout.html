@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Xavfsiz To‘lov (Demo) — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- Demo Mode Alert Banner -->
+            <div class="alert alert-warning border-0 shadow-sm rounded-4 d-flex align-items-center mb-4 p-3">
+                <div class="bg-warning text-dark rounded-circle p-2 me-3 d-inline-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                    <i class="fas fa-flask fs-5"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark">Demo To‘lov Rejimi (Sandbox)</h6>
+                    <small class="text-muted">Hozirda sinov rejimi faol. Hech qanday real pul yechilmaydi.</small>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex p-3 mb-2">
+                        <i class="fas fa-shield-alt fs-2 text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">Buyurtmani rasmiylashtirish</h4>
+                    <p class="text-secondary small">Xavfsiz bitim kafolati va onlayn to‘lov</p>
+                </div>
+
+                <!-- Order summary -->
+                <div class="bg-light p-3 rounded-4 mb-4 border">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ listing.primary_image_url }}" class="rounded-3 me-3 object-fit-cover shadow-sm" width="65" height="65" alt="{{ listing.title }}" onerror="this.src='/static/images/no-image.svg'">
+                        <div class="overflow-hidden">
+                            <h6 class="fw-bold mb-1 text-truncate">{{ listing.title }}</h6>
+                            <small class="text-secondary"><i class="fas fa-map-marker-alt text-danger me-1"></i>{{ listing.city|default:'O‘zbekiston' }}</small>
+                        </div>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between text-secondary small mb-1">
+                        <span>Buyurtma ID:</span>
+                        <span class="fw-bold text-dark">#{{ order.id }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-secondary small mb-2">
+                        <span>Sotuvchi:</span>
+                        <span>{{ listing.user.full_name|default:listing.user.phone }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between fs-5 fw-bold text-primary pt-2 border-top">
+                        <span>Jami summa:</span>
+                        <span>{{ order.amount|floatformat:0 }} UZS</span>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <form action="{% url 'demo_payment_process' order.id %}" method="post" id="demoPaymentForm">
+                    {% csrf_token %}
+                    
+                    <h6 class="fw-bold mb-3"><i class="fas fa-credit-card text-primary me-2"></i>To‘lov usulini tanlang (Demo):</h6>
+
+                    <!-- Payment Provider Options -->
+                    <div class="row g-2 mb-4">
+                        <div class="col-4">
+                            <label class="card p-2 text-center border rounded-3 cursor-pointer h-100 option-card active-option" style="cursor: pointer;">
+                                <input type="radio" name="payment_method" value="Payme Demo" class="d-none" checked>
+                                <span class="badge bg-info text-white mb-1 py-1"><i class="fas fa-wallet"></i></span>
+                                <span class="small fw-bold d-block">Payme</span>
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <label class="card p-2 text-center border rounded-3 cursor-pointer h-100 option-card" style="cursor: pointer;">
+                                <input type="radio" name="payment_method" value="Click Demo" class="d-none">
+                                <span class="badge bg-primary text-white mb-1 py-1"><i class="fas fa-mobile-alt"></i></span>
+                                <span class="small fw-bold d-block">Click</span>
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <label class="card p-2 text-center border rounded-3 cursor-pointer h-100 option-card" style="cursor: pointer;">
+                                <input type="radio" name="payment_method" value="Uzcard / Humo Demo" class="d-none">
+                                <span class="badge bg-success text-white mb-1 py-1"><i class="fas fa-credit-card"></i></span>
+                                <span class="small fw-bold d-block">Uzcard/Humo</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Simulated Card Input Fields -->
+                    <div class="p-3 bg-light rounded-3 mb-4 border">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted fw-bold">TEST PLASTIK KARTA</small>
+                            <span class="badge bg-success-subtle text-success">Avtomatik to‘ldirilgan</span>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm font-monospace bg-white" value="8600 •••• •••• 1234" readonly>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="text" class="form-control form-control-sm bg-white" value="Amal qilish: 12/28" readonly>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="form-control form-control-sm bg-white" value="SMS kod: 7777" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Demo Payment -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" id="btnSubmitPayment" class="btn btn-success btn-lg fw-bold py-3 rounded-pill shadow-sm">
+                            <i class="fas fa-check-circle me-2"></i> Demo to‘lovni tasdiqlash ({{ order.amount|floatformat:0 }} UZS)
+                        </button>
+                        <a href="{% url 'listing_detail' listing.id %}" class="btn btn-outline-secondary rounded-pill py-2">
+                            Bekor qilish
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const optionCards = document.querySelectorAll('.option-card');
+        optionCards.forEach(card => {
+            card.addEventListener('click', function() {
+                optionCards.forEach(c => {
+                    c.classList.remove('border-primary', 'bg-light');
+                    c.style.borderColor = '';
+                });
+                this.classList.add('border-primary', 'bg-light');
+                this.style.borderWidth = '2px';
+            });
+        });
+
+        // Set default active styling
+        const defaultActive = document.querySelector('.active-option');
+        if (defaultActive) {
+            defaultActive.classList.add('border-primary', 'bg-light');
+            defaultActive.style.borderWidth = '2px';
+        }
+
+        const form = document.getElementById('demoPaymentForm');
+        form.addEventListener('submit', function() {
+            const btn = document.getElementById('btnSubmitPayment');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> To‘lov o‘tkazilmoqda...';
+            btn.disabled = true;
+        });
+    });
+</script>
+{% endblock %}

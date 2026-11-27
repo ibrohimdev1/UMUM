@@ -1,0 +1,183 @@
+/* UMUM Marketplace Stylesheet */
+:root {
+    --primary-color: #0d6efd;
+    --primary-dark: #0a192f;
+    --accent-yellow: #ffc107;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header & Translucent Navbar (TIU Style) */
+.header-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1050;
+}
+
+.top-bar {
+    background: rgba(5, 10, 20, 0.75);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.82rem;
+}
+
+.main-navbar {
+    background: rgba(10, 20, 38, 0.65);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    transition: background 0.3s ease;
+}
+
+.main-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 0.82rem;
+    white-space: nowrap !important;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.main-navbar .nav-link:hover,
+.main-navbar .nav-link.active {
+    color: var(--accent-yellow) !important;
+    transform: translateY(-1px);
+}
+
+/* Fullscreen / Full-width Hero Section */
+.hero-fullscreen {
+    position: relative;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 130px;
+    padding-bottom: 60px;
+    background: linear-gradient(180deg, rgba(8, 15, 30, 0.72) 0%, rgba(8, 15, 30, 0.85) 100%),
+                url('/static/images/hero-banner.jpg') center center / cover no-repeat;
+    background-attachment: scroll;
+    color: #ffffff;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-content {
+    z-index: 2;
+    max-width: 900px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-search-box {
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 8px 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.hero-banner-preview {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* Bouncing Down Arrow Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.8rem;
+    animation: bounce 2s infinite;
+    cursor: pointer;
+    text-decoration: none;
+    z-index: 2;
+}
+
+.scroll-indicator:hover {
+    color: var(--accent-yellow);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translate(-50%, 0);
+    }
+    40% {
+        transform: translate(-50%, -10px);
+    }
+    60% {
+        transform: translate(-50%, -5px);
+    }
+}
+
+/* Other Cards */
+.transition-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.transition-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.listing-img-thumb {
+    height: 190px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.category-card {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.category-card:hover {
+    background-color: #f8f9fa;
+}
+
+/* AKSIYA Promo Ticket Badge */
+.aksiya-badge-container {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.listing-card:hover .aksiya-badge-container {
+    transform: scale(1.06);
+    filter: brightness(1.08);
+}
+
+.aksiya-ticket-svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .hero-fullscreen {
+        min-height: 80vh;
+        padding-top: 110px;
+    }
+}

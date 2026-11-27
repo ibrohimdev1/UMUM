@@ -1,0 +1,11 @@
+{% if listing.is_promotion %}
+<div class="position-absolute top-0 start-0 m-2 aksiya-badge-container" style="z-index: 5;">
+    <svg class="aksiya-ticket-svg" viewBox="0 0 78 26" width="78" height="26" style="display: block; filter: drop-shadow(0 3px 6px rgba(112,0,255,0.45));">
+        <!-- Exact Uzum-style Violet Ticket Shape with Notch cutouts -->
+        <path d="M 5,1 L 46,1 A 4,4 0 0,0 54,1 L 73,1 A 4,4 0 0,1 77,5 L 77,21 A 4,4 0 0,1 73,25 L 54,25 A 4,4 0 0,0 46,25 L 5,25 A 4,4 0 0,1 1,21 L 1,5 A 4,4 0 0,1 5,1 Z" fill="#7000FF" />
+        <text x="36" y="17" fill="#FFFFFF" font-size="11" font-weight="800" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle" letter-spacing="0.6">
+            {{ listing.promotion_text|default:'AKSIYA' }}
+        </text>
+    </svg>
+</div>
+{% endif %}

@@ -1,0 +1,209 @@
+<!-- Header Wrapper with Topbar & Floating Navbar (TIU Style) -->
+<header class="header-wrapper">
+    <!-- Top Utility Bar -->
+    <div class="top-bar py-1 px-3 d-none d-lg-block">
+        <div class="container d-flex justify-content-between align-items-center text-white-50">
+            <div class="d-flex gap-4">
+                <span><i class="fas fa-shield-alt text-warning me-1"></i> {{ t.top_safe }}</span>
+                <span><i class="fas fa-credit-card text-info me-1"></i> {{ t.top_payme }}</span>
+                <span><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ t.top_country }}</span>
+                <span><i class="fas fa-headset text-success me-1"></i> {{ t.top_support }}</span>
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+                <a href="/api/docs/" class="text-white-50 text-decoration-none hover-light"><i class="fas fa-code me-1"></i> {{ t.top_api }}</a>
+                
+                <!-- Direct Language Switcher in Topbar -->
+                <div class="btn-group btn-group-sm rounded-pill overflow-hidden border border-secondary" role="group">
+                    <a href="?lang=uz" class="btn btn-sm py-0 px-2 {% if current_language == 'uz' %}btn-warning fw-bold text-dark{% else %}btn-dark text-white-50{% endif %}">UZ</a>
+                    <a href="?lang=ru" class="btn btn-sm py-0 px-2 {% if current_language == 'ru' %}btn-warning fw-bold text-dark{% else %}btn-dark text-white-50{% endif %}">RU</a>
+                    <a href="?lang=en" class="btn btn-sm py-0 px-2 {% if current_language == 'en' %}btn-warning fw-bold text-dark{% else %}btn-dark text-white-50{% endif %}">EN</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark main-navbar py-2 py-lg-3">
+        <div class="container-fluid px-3 px-xl-4">
+            <!-- Brand Logo -->
+            <a class="navbar-brand fw-bold fs-3 text-white d-flex align-items-center me-3 me-xl-4" href="{% url 'home' %}">
+                <span class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center me-2 shadow-sm" style="width: 38px; height: 38px;">
+                    <i class="fas fa-store-alt fs-5"></i>
+                </span>
+                <span class="tracking-wide">UMUM</span>
+            </a>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links (Uppercase & Bold, Single Line without Wrapping) -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 text-uppercase fw-bold text-nowrap" style="letter-spacing: 0.5px; font-size: 0.82rem;">
+                    <li class="nav-item">
+                        <a class="nav-link px-2 px-xl-3 text-nowrap active" href="{% url 'home' %}">{{ t.nav_home }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2 px-xl-3 text-nowrap" href="{% url 'listing_list' %}">{{ t.nav_listings }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2 px-xl-3 text-nowrap" href="{% url 'map_view' %}">{{ t.nav_map }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-2 px-xl-3 text-nowrap" href="{% url 'ai_assistant_page' %}" onclick="if(window.toggleAIChat){ window.toggleAIChat(); return false; }">{{ t.nav_ai }}</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link px-2 px-xl-3 text-nowrap" href="{% url 'chats_list' %}">{{ t.nav_chats }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+                <!-- Mobile Only Language Switcher -->
+                <div class="d-lg-none my-2 text-center">
+                    <div class="btn-group btn-group-sm rounded-pill overflow-hidden border border-secondary" role="group">
+                        <a href="?lang=uz" class="btn btn-sm py-1 px-3 {% if current_language == 'uz' %}btn-warning fw-bold text-dark{% else %}btn-outline-light text-white{% endif %}">UZ</a>
+                        <a href="?lang=ru" class="btn btn-sm py-1 px-3 {% if current_language == 'ru' %}btn-warning fw-bold text-dark{% else %}btn-outline-light text-white{% endif %}">RU</a>
+                        <a href="?lang=en" class="btn btn-sm py-1 px-3 {% if current_language == 'en' %}btn-warning fw-bold text-dark{% else %}btn-outline-light text-white{% endif %}">EN</a>
+                    </div>
+                </div>
+
+                <!-- Right Actions (Clean, Balanced & Single-Line) -->
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0 flex-nowrap">
+                    <!-- Favorites Heart Feature -->
+                    <a href="{% url 'favorites_list' %}" 
+                       class="btn btn-outline-light btn-sm rounded-circle position-relative d-inline-flex align-items-center justify-content-center p-0 fav-btn" 
+                       title="{{ t.nav_favorites }}"
+                       style="width: 38px; height: 38px; min-width: 38px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25);">
+                        <!-- Crisp White Heart Icon -->
+                        <i class="far fa-heart text-white fs-5"></i>
+                        {% if favorites_count > 0 %}
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.65rem; padding: 0.25em 0.5em;">
+                                {{ favorites_count }}
+                                <span class="visually-hidden">favorites</span>
+                            </span>
+                        {% endif %}
+                    </a>
+
+                    <!-- Notification Bell Feature -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light btn-sm rounded-circle position-relative d-inline-flex align-items-center justify-content-center p-0 notif-bell-btn" 
+                                type="button" 
+                                id="notificationDropdown" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false" 
+                                title="{{ t.notif_title }}"
+                                style="width: 38px; height: 38px; min-width: 38px; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25);">
+                            <!-- Crisp Bell Icon -->
+                            <i class="far fa-bell text-white fs-5"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.65rem; padding: 0.25em 0.5em;">
+                                    {{ unread_notifications_count }}
+                                </span>
+                            {% endif %}
+                        </button>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 p-0 mt-2" aria-labelledby="notificationDropdown" style="width: 340px; border-radius: 14px; overflow: hidden; background: #ffffff;">
+                            <!-- Panel Header -->
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom" style="background: #0f1e36; color: #ffffff;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-bell text-warning"></i>
+                                    <span class="fw-bold fs-6">{{ t.notif_title }}</span>
+                                    {% if unread_notifications_count > 0 %}
+                                        <span class="badge bg-warning text-dark rounded-pill">{{ unread_notifications_count }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if unread_notifications_count > 0 and user.is_authenticated %}
+                                    <form action="{% url 'notifications_mark_all_read' %}" method="post" class="m-0">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-link text-warning p-0 text-decoration-none small" style="font-size: 0.75rem;">
+                                            <i class="fas fa-check-double me-1"></i>{{ t.notif_mark_all }}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+
+                            <!-- Notifications Scrollable Body -->
+                            <div style="max-height: 320px; overflow-y: auto;">
+                                {% if recent_notifications %}
+                                    {% for n in recent_notifications %}
+                                        <div class="px-3 py-2 border-bottom d-flex align-items-start gap-2 {% if not n.is_read %}bg-light border-start border-warning border-3{% endif %}">
+                                            <div class="mt-1">
+                                                {% if n.channel == 'SMS' %}
+                                                    <span class="badge bg-info-subtle text-info rounded-circle p-2"><i class="fas fa-sms"></i></span>
+                                                {% elif 'to‘lov' in n.body|lower or 'tolov' in n.body|lower or 'payme' in n.body|lower %}
+                                                    <span class="badge bg-success-subtle text-success rounded-circle p-2"><i class="fas fa-check-circle"></i></span>
+                                                {% elif 'e‘lon' in n.body|lower or 'elon' in n.body|lower %}
+                                                    <span class="badge bg-primary-subtle text-primary rounded-circle p-2"><i class="fas fa-tag"></i></span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary-subtle text-secondary rounded-circle p-2"><i class="fas fa-bell"></i></span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="mb-1 text-dark small fw-medium text-break" style="line-height: 1.3;">{{ n.body }}</p>
+                                                <span class="text-muted" style="font-size: 0.72rem;"><i class="far fa-clock me-1"></i>{{ n.sent_at|timesince }} oldin</span>
+                                            </div>
+                                            {% if not n.is_read and user.is_authenticated %}
+                                                <form action="{% url 'notification_mark_read' n.id %}" method="post" class="m-0 align-self-center">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary rounded-circle p-1 border-0" title="O‘qildi">
+                                                        <i class="fas fa-check text-success" style="font-size: 0.75rem;"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="text-center py-4 px-3 text-muted">
+                                        <i class="far fa-bell-slash fs-3 text-secondary mb-2 d-block"></i>
+                                        <p class="small mb-0">{{ t.notif_empty }}</p>
+                                        {% if not user.is_authenticated %}
+                                            <a href="{% url 'auth_login' %}" class="btn btn-sm btn-outline-primary rounded-pill mt-2">{{ t.nav_login }}</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Panel Footer -->
+                            {% if user.is_authenticated %}
+                                <div class="p-2 text-center bg-light border-top">
+                                    <a href="{% url 'notifications_list' %}" class="text-decoration-none small text-primary fw-semibold">
+                                        {{ t.notif_all }} <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light btn-sm rounded-pill dropdown-toggle px-3 py-2 fw-semibold text-nowrap d-inline-flex align-items-center" type="button" data-bs-toggle="dropdown" style="max-width: 190px;">
+                                <i class="fas fa-user-circle text-warning me-1"></i>
+                                <span class="d-inline-block text-truncate" style="max-width: 125px;">{{ user.full_name|default:user.phone }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" href="{% url 'my_listings' %}"><i class="fas fa-list-ul me-2 text-primary"></i>{{ t.nav_my_listings }}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-id-card me-2 text-info"></i>{{ t.nav_profile }}</a></li>
+                                {% if user.is_staff %}
+                                    <li><a class="dropdown-item text-danger fw-bold" href="{% url 'admin:index' %}"><i class="fas fa-shield-alt me-2"></i>{{ t.nav_admin }}</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'auth_logout' %}"><i class="fas fa-sign-out-alt me-2 text-secondary"></i>{{ t.nav_logout }}</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'auth_login' %}" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold text-nowrap">
+                            <i class="fas fa-sign-in-alt me-1 text-warning"></i> {{ t.nav_login }}
+                        </a>
+                    {% endif %}
+
+                    <!-- Post Ad Button -->
+                    <a href="{% url 'listing_create' %}" class="btn btn-warning btn-sm rounded-pill px-3 py-2 fw-bold text-dark shadow-sm text-nowrap">
+                        <i class="fas fa-plus-circle me-1"></i> {{ t.nav_post_ad }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

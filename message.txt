@@ -1,0 +1,1733 @@
+# MASTER SOFTWARE ARCHITECTURE AND DEVELOPMENT PROMPT
+# UMUM — FULL-STACK MARKETPLACE PLATFORM
+### Python 3 + Django 5.2 LTS + Django REST Framework + Django Templates + Jazzmin 3.0.5
+
+---
+
+# 1. ROLE AND RESPONSIBILITIES
+
+Act as a Senior Software Architect, Senior Python Developer, Django Full-Stack Engineer, Database Architect, and Technical Mentor.
+
+You are responsible for designing and developing a complete, modular, maintainable, secure, and scalable marketplace platform called **UMUM**.
+
+You must think and work like a professional software engineering team.
+
+Do not simply generate code. First analyze the requirements document, understand the system, design its architecture, divide it into independent modules, and explain the responsibilities and interactions of those modules.
+
+The final system must be understandable to beginner and intermediate developers while following professional software engineering principles.
+
+**Your most important responsibility is to make the architecture understandable.**
+
+Every folder, module, controller, service, model, repository, and configuration file must have a clearly explained purpose.
+
+# 2. ORIGINAL PROJECT DOCUMENT
+
+An original project document named `UMUM_platfo'rmasi.dotx` is attached.
+
+It contains the Software Requirements Specification (SRS), Product Requirements Document (PRD), functional requirements, non-functional requirements, Use Cases, User Stories, UML diagrams, ER diagrams, API endpoints, database entities, project scope, sprint plan, risks, and testing requirements.
+
+Read the entire document before designing or implementing the application.
+
+The original document uses Java Spring Boot as its backend technology and React/Next.js as its web frontend.
+
+**Technology replacement instructions:**
+
+Replace the original Java Spring Boot backend with Python and Django.
+
+Replace the original React/Next.js web frontend with Django Templates.
+
+Do not generate a React, Next.js, or React Native frontend as part of this implementation.
+
+However, maintain a REST API so that future Android and iOS applications can use the same backend.
+
+Preserve the original business requirements, functionality, project scope, use cases, database entities, and acceptance criteria.
+
+Do not silently remove or change requirements.
+
+If the new architecture requires modifying an original technical decision, explain the reason and document the change.
+
+# 3. PROJECT OVERVIEW
+
+Project name: UMUM.
+
+Project type: Classifieds Marketplace Platform.
+
+Main idea: "Everything in one place."
+
+UMUM is a marketplace where users can publish advertisements, search for products and services, communicate with sellers, view advertisements on an interactive map, and make payments through Payme.
+
+The platform includes:
+
+- Vehicles and transportation.
+- Real estate.
+- Electronics.
+- Jobs.
+- Products and goods.
+- Services.
+- Other advertisement categories.
+
+The platform must support three main user roles:
+
+1. Guest.
+2. Registered User.
+3. Administrator.
+
+A registered user can operate as both a buyer and a seller using the same account.
+
+The platform must support:
+
+- User registration through phone number and SMS verification.
+- User profiles.
+- Seller profiles.
+- Advertisement creation and management.
+- Hierarchical categories.
+- Searching and filtering.
+- Interactive maps.
+- Favorites.
+- Real-time chat.
+- Payme payments.
+- SMS notifications.
+- AI assistance.
+- Advertisement moderation.
+- User reports.
+- Administration and analytics.
+- Multilingual preparation.
+
+# 4. TECHNOLOGY STACK
+
+Use the following technology stack.
+
+## 4.1 Backend
+
+- Python 3.12.
+- Django 5.2 LTS (use the latest compatible patch release).
+- Django REST Framework.
+- Django ORM.
+- JWT Authentication.
+- django-jazzmin==3.0.5.
+
+## 4.2 Frontend
+
+The platform must have two frontend delivery channels.
+
+**A. Django Templates — Main Web Application**
+
+Use:
+
+- Django Templates.
+- HTML5.
+- CSS3.
+- Bootstrap 5.
+- JavaScript.
+- Leaflet.js for interactive maps.
+- WebSocket JavaScript API for real-time chat.
+
+Create a complete responsive website.
+
+Do not use React or Next.js.
+
+**B. Django REST Framework — API Application**
+
+Use REST APIs to provide JSON responses.
+
+The API must support future:
+
+- Android applications.
+- iOS applications.
+- External clients.
+- Other authorized integrations.
+
+The web frontend and API must share the same business logic.
+
+Do not duplicate business rules in Django Templates views and API views.
+
+## 4.3 Database
+
+- PostgreSQL 16.
+- Django ORM.
+- Django migrations.
+- Proper foreign keys and database constraints.
+
+## 4.4 Real-Time Communication
+
+- Django Channels.
+- WebSockets.
+- Redis.
+- channels-redis.
+
+## 4.5 External Integrations
+
+- Payme Merchant API (JSON-RPC).
+- SMS provider API, such as Eskiz.
+- AI / LLM API.
+- OpenStreetMap.
+- Leaflet.js.
+- S3-compatible storage or MinIO for image storage.
+
+## 4.6 Development and DevOps
+
+- Git.
+- GitHub.
+- Docker.
+- Docker Compose.
+- GitHub Actions.
+- Swagger/OpenAPI.
+- Automated testing using Django TestCase or pytest.
+
+Use compatible and maintained dependency versions.
+
+Verify package compatibility before generating the final requirements.txt.
+
+The following package version is mandatory:
+
+`django-jazzmin==3.0.5`
+
+# 5. THE MOST IMPORTANT REQUIREMENT: DUAL FRONTEND ARCHITECTURE
+
+The UMUM project must have both a server-rendered Django website and a REST API.
+
+They must be two different presentation layers connected to the same business logic.
+
+Architecture:
+
+```text
+             UMUM PLATFORM
+                    |
+          ---------------------
+          |                   |
+          v                   v
+    DJANGO WEBSITE       REST API
+    Django Templates     Django REST Framework
+          |                   |
+          v                   v
+    Web Controllers      API Controllers
+          |                   |
+          ---------+-----------
+                   |
+                   v
+             SERVICES
+             Business Logic
+                   |
+                   v
+              REPOSITORIES
+              Data Access
+                   |
+                   v
+                MODELS
+                   |
+                   v
+               PostgreSQL
+```
+
+Both frontends must use the same Services and Repositories.
+
+For example:
+
+When a user creates an advertisement:
+
+- A web user submits an HTML form.
+- Django Web Controller validates the request.
+- The controller calls ListingService.
+- ListingService applies the business rules.
+- ListingRepository saves the advertisement.
+- Django Template displays the result.
+
+When an API client creates an advertisement:
+
+- The client sends a JSON request.
+- Django REST Controller validates it using a DRF Serializer.
+- The controller calls the same ListingService.
+- ListingService applies exactly the same business rules.
+- ListingRepository saves the advertisement.
+- The API returns a JSON response.
+
+The creation logic must exist only once.
+
+Never implement separate advertisement creation logic for the website and API.
+
+The same principle must apply to registration, favorites, payments, chat, moderation, and other business operations.
+
+# 6. ARCHITECTURAL PATTERN
+
+Use a modular layered architecture.
+
+The following layers are mandatory:
+
+1. Controllers.
+2. Services.
+3. Models.
+4. Repositories.
+5. Config.
+6. Integrations.
+7. Forms.
+8. Serializers.
+9. Templates.
+10. Tests.
+
+Follow these engineering principles:
+
+- Separation of Concerns.
+- Single Responsibility Principle.
+- DRY.
+- SOLID principles.
+- Low Coupling.
+- High Cohesion.
+- Reusability.
+- Clean Architecture principles where appropriate.
+
+The architecture must remain understandable.
+
+Do not introduce unnecessary abstraction or complex enterprise patterns.
+
+# 7. REQUIRED PROJECT DIRECTORY STRUCTURE
+
+Create a professional Django project structure similar to the following.
+
+You may improve it when necessary, but keep all required architectural layers.
+
+```text
+UMUM/
+│
+├── manage.py
+├── app.py
+├── requirements.txt
+├── .env
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── README.md
+│
+├── config/
+│   ├── __init__.py
+│   ├── urls.py
+│   ├── asgi.py
+│   ├── wsgi.py
+│   │
+│   └── settings/
+│       ├── __init__.py
+│       ├── base.py
+│       ├── development.py
+│       └── production.py
+│
+├── apps/
+│   │
+│   ├── common/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── permissions/
+│   │   ├── exceptions/
+│   │   └── utilities/
+│   │
+│   ├── accounts/
+│   │   ├── models/
+│   │   ├── controllers/
+│   │   │   ├── web/
+│   │   │   └── api/
+│   │   ├── services/
+│   │   ├── repositories/
+│   │   ├── serializers/
+│   │   ├── forms/
+│   │   ├── permissions/
+│   │   ├── urls/
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── tests/
+│   │   └── templates/
+│   │
+│   ├── categories/
+│   │   ├── models/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── repositories/
+│   │   ├── serializers/
+│   │   ├── urls.py
+│   │   └── admin.py
+│   │
+│   ├── listings/
+│   │   ├── models/
+│   │   ├── controllers/
+│   │   │   ├── web/
+│   │   │   └── api/
+│   │   ├── services/
+│   │   ├── repositories/
+│   │   ├── serializers/
+│   │   ├── forms/
+│   │   ├── permissions/
+│   │   ├── urls/
+│   │   ├── admin.py
+│   │   ├── tests/
+│   │   └── templates/
+│   │
+│   ├── favorites/
+│   ├── search/
+│   ├── chats/
+│   ├── orders/
+│   ├── payments/
+│   ├── notifications/
+│   ├── ai_assistant/
+│   ├── moderation/
+│   ├── reports/
+│   ├── analytics/
+│   └── audit/
+│
+├── integrations/
+│   ├── payme/
+│   ├── sms/
+│   ├── ai/
+│   ├── maps/
+│   └── storage/
+│
+├── templates/
+│   ├── base.html
+│   ├── components/
+│   ├── home/
+│   ├── accounts/
+│   ├── listings/
+│   ├── categories/
+│   ├── favorites/
+│   ├── chats/
+│   ├── orders/
+│   ├── payments/
+│   ├── profile/
+│   └── errors/
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── media/
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── api/
+│
+└── docs/
+    ├── architecture/
+    ├── database/
+    ├── api/
+    └── use_cases/
+```
+
+Important Django convention:
+
+- `manage.py` is the normal Django management entry point.
+- `config/asgi.py` is the ASGI entry point.
+- `config/wsgi.py` is the WSGI entry point.
+- `app.py` is not a standard Django entry point.
+
+If app.py is included, explain its optional deployment purpose. Do not place application business logic inside it.
+
+Every Django application must have a clear responsibility.
+
+Do not create empty folders without explaining why they are necessary.
+
+# 8. EXPLAIN EACH ARCHITECTURAL LAYER
+
+This section is mandatory.
+
+Explain every layer in simple English.
+
+Include its purpose, responsibility, examples, and communication with other layers.
+
+## 8.1 Controllers
+
+Controllers are responsible for receiving HTTP requests and returning HTTP responses.
+
+Create two types of controllers:
+
+A. Web Controllers:
+- Django class-based views or function-based views.
+- Handle HTML requests.
+- Receive form submissions.
+- Render Django Templates.
+- Redirect users when necessary.
+
+B. API Controllers:
+- Django REST Framework APIViews or ViewSets.
+- Receive JSON requests.
+- Return JSON responses.
+- Use serializers for validation.
+- Apply API permissions.
+
+Explain how Web Controllers and API Controllers use the same services.
+
+Controllers must not contain complex business logic.
+
+## 8.2 Services
+
+Services implement business logic.
+
+Examples:
+
+- AuthenticationService.
+- UserProfileService.
+- SellerProfileService.
+- ListingService.
+- CategoryService.
+- SearchService.
+- FavoriteService.
+- ChatService.
+- OrderService.
+- PaymentService.
+- NotificationService.
+- ModerationService.
+- AIService.
+- ReportService.
+
+Explain why services are separate from controllers.
+
+Services must be reusable by both website controllers and API controllers.
+
+Services must not directly return Django HttpResponse or DRF Response objects.
+
+## 8.3 Models
+
+Models represent database entities.
+
+Use Django ORM.
+
+Explain:
+
+- Fields.
+- Primary keys.
+- Foreign keys.
+- One-to-one relationships.
+- Many-to-many relationships.
+- Model validation.
+- Database constraints.
+- Enumerations and statuses.
+
+Implement a custom User model before creating initial migrations.
+
+## 8.4 Repositories
+
+Repositories handle database access.
+
+Examples:
+
+- UserRepository.
+- ListingRepository.
+- CategoryRepository.
+- FavoriteRepository.
+- ChatRepository.
+- OrderRepository.
+- PaymentRepository.
+
+Explain:
+
+- Reading records.
+- Creating records.
+- Updating records.
+- Filtering.
+- Searching.
+- Complex queries.
+- Database transactions.
+
+Use repositories when they provide meaningful separation.
+
+Do not create meaningless wrappers around every basic ORM operation.
+
+## 8.5 Forms
+
+Forms handle HTML input in the Django website.
+
+Use Django Forms or ModelForms.
+
+They must:
+
+- Validate input.
+- Display validation errors.
+- Process form submissions.
+- Protect against invalid data.
+
+## 8.6 Serializers
+
+Serializers handle JSON input and output for REST APIs.
+
+Use Django REST Framework serializers.
+
+They must:
+
+- Validate incoming JSON.
+- Serialize model data.
+- Validate relationships.
+- Enforce appropriate field restrictions.
+
+## 8.7 Config
+
+Explain:
+
+- Settings.
+- Database configuration.
+- Environment variables.
+- Installed applications.
+- Middleware.
+- Authentication.
+- URL routing.
+- Static files.
+- Media files.
+- Logging.
+- Redis.
+- ASGI.
+- WSGI.
+- Development and production environments.
+
+## 8.8 Integrations
+
+External services must be separated from internal business logic.
+
+Each integration should have its own adapter.
+
+For example:
+
+- PaymeClient.
+- SMSProvider.
+- AIProvider.
+- MapService.
+- StorageService.
+
+Explain how the application communicates with these external services.
+
+# 9. FUNCTIONAL REQUIREMENTS — FR-01 TO FR-22
+
+Implement all 22 functional requirements from the original SRS.
+
+Preserve the original identifiers and MoSCoW priorities.
+
+Do not change the meaning of a requirement.
+
+FR-01 — Registration and Authentication:
+Users must register and log in using their phone number and SMS verification code.
+
+FR-02 — User Profile:
+Users must be able to edit their name, profile picture, and contact information.
+
+FR-03 — Create Advertisement:
+Users must be able to create an advertisement containing a title, description, price, category, images, and location.
+
+FR-04 — Advertisement Management:
+Users must be able to edit, archive, and delete their own advertisements.
+
+FR-05 — Categories:
+Advertisements must be organized using hierarchical categories.
+
+FR-06 — Search and Filtering:
+Users must search by keyword, category, price range, city, and sorting criteria.
+
+FR-07 — Advertisement Details:
+The advertisement page must display images, description, price, seller information, and a map.
+
+FR-08 — Map:
+Advertisements must be displayed on an interactive map and searchable by geographic area.
+
+FR-09 — Favorites:
+Users must be able to add and remove advertisements from favorites.
+
+FR-10 — Chat:
+Buyers and sellers must exchange messages in real time within an advertisement context.
+
+FR-11 — Payment:
+The system must initiate Payme payments, verify responses, and save transaction statuses.
+
+FR-12 — Payment Idempotency:
+Repeated payment requests must be processed safely without duplicate payment processing.
+
+FR-13 — SMS Notifications:
+The system must send SMS verification codes and payment and moderation notifications.
+
+FR-14 — AI Assistant:
+The AI assistant must improve advertisement descriptions, suggest prices, and help with searching.
+
+FR-15 — Moderation:
+New and edited advertisements must be reviewed by an administrator before publication.
+
+FR-16 — Reports:
+Users must be able to report suspicious advertisements or users by providing a reason.
+
+FR-17 — Admin Panel:
+Administrators must manage users, categories, and system settings.
+
+FR-18 — Reports and Statistics:
+Administrators must view statistics about advertisements, users, and payments.
+
+FR-19 — Multilingual Support:
+The interface must be prepared to support Uzbek, Russian, and English.
+
+FR-20 — Audit Logs:
+Important operations, including payments, moderation, and role changes, must be recorded.
+
+FR-21 — Guest Mode:
+Guests must be able to search for and view advertisements without an account.
+
+When a guest attempts to use protected functionality such as purchasing, publishing advertisements, chatting, or favorites, redirect them to authentication and return them to the original intended action after successful authentication.
+
+Do not create separate server accounts for guests.
+
+FR-22 — Seller Profile:
+Before publishing their first advertisement, users must complete their seller profile with their full name, city, and contact information.
+
+# 10. NON-FUNCTIONAL REQUIREMENTS — NFR-01 TO NFR-10
+
+Implement and explain all ten NFR requirements.
+
+NFR-01 — Performance:
+95% of search requests should respond within 2 seconds under normal workload.
+
+NFR-02 — Availability:
+Target 99% monthly service availability.
+
+NFR-03 — Security:
+Secure password/token storage, BCrypt-compatible password hashing, JWT authentication, and HTTPS/TLS.
+
+NFR-04 — Privacy:
+Collect only necessary personal data and restrict access according to roles.
+
+NFR-05 — Reliability:
+Payment and order operations must use database transactions and safe duplicate-request handling.
+
+NFR-06 — Scalability:
+New modules must be introduced without breaking existing functionality.
+
+NFR-07 — Usability:
+Important actions such as searching and creating advertisements should require approximately 3–4 steps. The interface must be responsive.
+
+NFR-08 — Audit:
+Payment, moderation, and administrator operations must be logged.
+
+NFR-09 — Compatibility:
+The website must support modern browsers. The REST API must be suitable for future Android and iOS clients.
+
+NFR-10 — Maintainability:
+Use Git, automated testing, and documented APIs through OpenAPI/Swagger.
+
+For each NFR, explain the implementation strategy and how it will be verified.
+
+# 11. USER ROLES AND PERMISSIONS
+
+Implement Role-Based Access Control (RBAC).
+
+## Guest
+
+Can:
+
+- View advertisements.
+- Search advertisements.
+- Browse categories.
+- View advertisements on the map.
+
+Cannot:
+
+- Publish advertisements.
+- Send chat messages.
+- Use favorites.
+- Perform protected purchase actions.
+
+When protected functionality is selected, redirect to registration/authentication and preserve the original destination.
+
+## Registered User
+
+One account can act as both buyer and seller.
+
+Can:
+
+- Manage their profile.
+- Complete a seller profile.
+- Create and manage their own advertisements.
+- Search and view advertisements.
+- Manage favorites.
+- Start chats.
+- Send messages.
+- Create orders.
+- Make Payme payments.
+- Submit reports.
+- Use AI assistance.
+
+## Administrator
+
+Can:
+
+- Manage users.
+- Block users.
+- Manage categories.
+- Approve and reject advertisements.
+- Review reports.
+- View analytics.
+- Manage system settings.
+- View audit logs.
+
+A user must never modify another user's advertisements, orders, or private chats.
+
+# 12. USE CASE IMPLEMENTATION
+
+Implement all eight Use Cases from the SRS.
+
+UC-01 — Registration and Login.
+
+UC-02 — Creating an Advertisement.
+
+UC-03 — Searching and Filtering Advertisements.
+
+UC-04 — Real-Time Chat.
+
+UC-05 — Payme Payment.
+
+UC-06 — Advertisement Moderation.
+
+UC-07 — AI Assistant.
+
+UC-08 — Submitting Reports.
+
+For each Use Case explain:
+
+1. Actor.
+2. Preconditions.
+3. Main execution flow.
+4. Alternative flow.
+5. Error conditions.
+6. Web Controller.
+7. API Controller.
+8. Service.
+9. Repository.
+10. Models.
+11. Relevant API endpoint.
+12. Corresponding web page.
+13. Expected result.
+14. Tests.
+
+Preserve all 12 User Stories (US-01 through US-12) and their acceptance criteria from the original SRS.
+
+# 13. DATABASE DESIGN
+
+Implement the database using PostgreSQL 16 and Django ORM.
+
+Use the original database entities:
+
+1. User.
+2. Category.
+3. Listing.
+4. ListingImage.
+5. Favorite.
+6. Chat.
+7. Message.
+8. Order.
+9. Payment.
+10. Report.
+11. Notification.
+12. AuditLog.
+
+Preserve the original core fields.
+
+**User:**
+id, full_name, phone, email, password_hash, role, status, city, seller_profile_completed, created_at.
+
+**Category:**
+id, name, parent_id.
+
+**Listing:**
+id, user_id, category_id, title, description, price, lat, lng, status, created_at.
+
+**ListingImage:**
+id, listing_id, url, position.
+
+**Favorite:**
+id, user_id, listing_id.
+
+**Chat:**
+id, listing_id, buyer_id, seller_id.
+
+**Message:**
+id, chat_id, sender_id, body, is_read, sent_at.
+
+**Order:**
+id, listing_id, buyer_id, amount, status.
+
+**Payment:**
+id, order_id, payme_ref, amount, status.
+
+**Report:**
+id, user_id, listing_id, reason, status.
+
+**Notification:**
+id, user_id, channel, body, sent_at.
+
+**AuditLog:**
+id, actor_id, action, entity, created_at.
+
+Explain all database relationships.
+
+Create an ER diagram using Mermaid.
+
+Use appropriate constraints and indexes.
+
+Examples:
+
+- Unique phone number.
+- Unique favorite per user and advertisement.
+- Foreign key relationships.
+- Appropriate indexing for search fields.
+- Database-level integrity constraints.
+
+Use a normalized design without unnecessary duplicate information.
+
+Important: FR-16 allows reports against advertisements or users, while the original Report entity primarily references listing_id. Identify this difference and document a suitable database design decision rather than silently ignoring it.
+
+# 14. STATUS MANAGEMENT
+
+Implement the original SRS statuses.
+
+## Listing
+
+- DRAFT
+- MODERATION
+- ACTIVE
+- REJECTED
+- ARCHIVED
+- SOLD
+
+## Order
+
+- PENDING
+- PAID
+- FAILED
+- CANCELLED
+- REFUNDED
+
+## Payment
+
+- CREATED
+- PERFORMED
+- CANCELLED
+- FAILED
+
+## User Status
+
+- ACTIVE
+- BLOCKED
+
+## User Role
+
+- USER
+- ADMIN
+
+## Report
+
+- OPEN
+- REVIEWED
+- CLOSED
+
+Use Django TextChoices.
+
+Explain every status and its allowed transitions.
+
+Implement status transitions through appropriate services rather than allowing arbitrary status changes from controllers.
+
+# 15. REST API DEVELOPMENT
+
+Create REST APIs using Django REST Framework.
+
+All API routes must use:
+
+`/api/v1/`
+
+Preserve the original endpoint list from the SRS.
+
+## Authentication
+
+- POST /auth/request-code
+- POST /auth/verify
+
+## Users
+
+- GET /users/me
+- PUT /users/me
+
+## Categories
+
+- GET /categories
+
+## Listings
+
+- GET /listings
+- GET /listings/{id}
+- GET /listings/map
+- POST /listings
+- PUT /listings/{id}
+- DELETE /listings/{id}
+- POST /listings/{id}/images
+
+## Favorites
+
+- POST /favorites/{listingId}
+- DELETE /favorites/{listingId}
+
+## Chats
+
+- GET /chats
+- POST /chats
+- GET /chats/{id}/messages
+- WS /ws/chat
+
+## Orders
+
+- POST /orders
+- GET /orders/{id}
+
+## Payments
+
+- POST /payments/payme
+
+## AI
+
+- POST /ai/improve-description
+- POST /ai/suggest-price
+
+Also implement the AI search-assistance capability described in FR-14, documenting any necessary API extension.
+
+## Reports
+
+- POST /reports
+
+## Moderation
+
+- GET /moderation/listings
+- PATCH /moderation/listings/{id}
+
+## Administration
+
+- GET /admin/users
+- PATCH /admin/users/{id}
+- GET /admin/stats
+
+For every endpoint explain:
+
+- HTTP method.
+- URL.
+- Purpose.
+- Authentication.
+- Permissions.
+- Input data.
+- Response data.
+- Validation.
+- Error responses.
+- Service used.
+- Repository used.
+
+Do not silently invent endpoints that are absent from the SRS. Create a separate section for recommended API extensions and explain why they are needed.
+
+Generate Swagger/OpenAPI documentation.
+
+# 16. DJANGO TEMPLATES — COMPLETE WEB APPLICATION
+
+Create a fully functional public-facing website using Django Templates.
+
+This is not just an admin dashboard.
+
+The user-facing website and administrator interface must be separate.
+
+## Required web pages
+
+Create the following pages based on the original SRS screen list.
+
+1. Homepage.
+2. Search results.
+3. Advertisement details.
+4. Registration and login.
+5. Create advertisement.
+6. My advertisements.
+7. Favorites.
+8. Chats.
+9. Payment.
+10. Profile and settings.
+11. Map view.
+12. AI assistant.
+13. Administration interface.
+
+Use a reusable base template.
+
+Example:
+
+`templates/base.html`
+
+Create reusable template components:
+
+- Header.
+- Navigation.
+- Footer.
+- Advertisement card.
+- Category card.
+- Search form.
+- Pagination.
+- Notifications.
+- Form errors.
+- Modal dialogs.
+
+Use Django Template inheritance.
+
+Example:
+
+`{% extends "base.html" %}`
+
+Create reusable partial templates.
+
+Do not duplicate HTML unnecessarily.
+
+## Web frontend requirements
+
+The website must be:
+
+- Responsive.
+- Easy to navigate.
+- Mobile-friendly.
+- Consistent in design.
+- Accessible.
+- Connected to real backend functionality.
+
+Create appropriate CSS and JavaScript files.
+
+Do not create fake buttons that have no functionality.
+
+Every visible action must perform its intended operation.
+
+# 17. AUTHENTICATION STRATEGY FOR WEB AND API
+
+Use the same account system and authentication business logic for both interfaces.
+
+For the server-rendered website:
+
+- Use secure Django session authentication.
+- Protect POST forms with CSRF tokens.
+- Maintain login state.
+- Support logout.
+- Redirect guests to authentication when necessary.
+
+For the REST API:
+
+- Use JWT authentication.
+- Use access and refresh tokens.
+- Validate tokens.
+- Apply permission classes.
+- Restrict protected API endpoints.
+
+Do not store sensitive authentication tokens insecurely in browser localStorage.
+
+Explain the difference between web sessions and API JWT authentication.
+
+# 18. REAL-TIME CHAT
+
+Implement real-time chat with:
+
+- Django Channels.
+- WebSockets.
+- Redis.
+- Database message persistence.
+
+The chat system must:
+
+- Create or retrieve conversations based on advertisements.
+- Identify buyers and sellers.
+- Verify chat participants.
+- Send and receive messages in real time.
+- Save messages.
+- Track read status.
+- Notify users about new messages.
+
+Provide both:
+
+A. Backend WebSocket implementation.
+
+B. Django Template chat interface with JavaScript WebSocket connection.
+
+A user must never access another user's private conversation.
+
+# 19. PAYME INTEGRATION
+
+Implement the Payme Merchant API using JSON-RPC.
+
+The integration must include:
+
+- CheckPerformTransaction.
+- CreateTransaction.
+- PerformTransaction.
+- CancelTransaction.
+- CheckTransaction.
+
+Create separate Payme integration classes.
+
+Implement:
+
+- Transaction verification.
+- Transaction creation.
+- Transaction confirmation.
+- Transaction cancellation.
+- Transaction status checking.
+- Idempotency.
+- Error handling.
+- Database transactions.
+- Audit logging.
+
+Do not store bank card information in the UMUM database.
+
+Use sandbox or mock mode when production credentials are unavailable.
+
+Clearly distinguish implemented functionality from untested integrations.
+
+# 20. SMS INTEGRATION
+
+Create an SMS provider abstraction.
+
+Support:
+
+- Phone verification.
+- SMS verification codes.
+- Payment notifications.
+- Advertisement moderation notifications.
+
+Implement:
+
+- Code expiration.
+- Attempt limitations.
+- Rate limiting.
+- Secure OTP storage.
+- Resend limitations.
+- Error handling.
+
+SMS provider credentials must come from environment variables.
+
+# 21. AI ASSISTANT
+
+Create an independent AI Assistant module.
+
+It must support:
+
+1. Advertisement description improvement.
+2. Price recommendations.
+3. Search assistance.
+
+AI communication must happen through the backend.
+
+Do not expose AI API keys to browser JavaScript.
+
+Do not send private user information such as phone numbers or passwords to the AI provider.
+
+AI suggestions must not automatically modify advertisements.
+
+The user must explicitly accept or reject AI-generated suggestions.
+
+If the AI provider is unavailable, the user must still be able to create advertisements manually.
+
+# 22. MAP INTEGRATION
+
+Use OpenStreetMap and Leaflet.
+
+Implement:
+
+- Advertisement markers.
+- Map-based browsing.
+- Location-based filtering.
+- Latitude and longitude storage.
+- Location selection while creating advertisements.
+
+Create both:
+
+A. Django Template map page.
+
+B. REST API map endpoint.
+
+Use the original lat and lng advertisement fields.
+
+# 23. DJANGO JAZZMIN ADMIN PANEL
+
+Install:
+
+`django-jazzmin==3.0.5`
+
+Configure it correctly in Django INSTALLED_APPS.
+
+Jazzmin must be used for the administrator interface.
+
+Configure:
+
+- Custom application title.
+- Custom branding.
+- Navigation.
+- Icons.
+- Sidebar.
+- Admin dashboard.
+- Model lists.
+- Search fields.
+- List filters.
+- Read-only fields.
+- Date hierarchy.
+- Admin actions.
+- Role-based permissions.
+
+Administrators must be able to manage:
+
+- Users.
+- Categories.
+- Advertisements.
+- Advertisement images.
+- Orders.
+- Payments.
+- Reports.
+- Notifications.
+- Audit logs.
+
+Apply appropriate restrictions to private chat and message information.
+
+Explain:
+
+- How to create a superuser.
+- How to access the admin panel.
+- How to use moderation tools.
+- How to restrict ordinary users from admin operations.
+
+Jazzmin must not replace the public-facing Django Templates website.
+
+# 24. SECURITY REQUIREMENTS
+
+Implement security throughout the application.
+
+Required security measures:
+
+- Secure password hashing.
+- JWT authentication for APIs.
+- Session authentication for web.
+- HTTPS-ready settings.
+- CSRF protection.
+- Input validation.
+- SQL injection protection.
+- XSS protection.
+- RBAC.
+- Ownership checks.
+- SMS rate limiting.
+- OTP expiration.
+- Secure image uploads.
+- File type validation.
+- File size validation.
+- Environment variable secrets.
+- Authenticated Payme callbacks.
+- Payment idempotency.
+- Audit logging.
+
+Never hardcode passwords, API keys, secret tokens, or database credentials.
+
+Configure secure production settings.
+
+# 25. NON-MVP FEATURES
+
+Follow the original project scope.
+
+The following features are outside the initial MVP:
+
+- Business/shop accounts.
+- Advertising banners.
+- Delivery and logistics integration.
+- Escrow payments and dispute resolution.
+- Multiple payment providers.
+- Video calls and voice messages.
+- Automatic AI image-based pricing.
+- Multi-country taxation and reporting.
+
+Do not implement these features as part of the first release.
+
+Design the architecture so they can be added later.
+
+Preserve the original MoSCoW priorities.
+
+# 26. TESTING
+
+Implement automated tests.
+
+## Unit Tests
+
+Test individual:
+
+- Services.
+- Repositories.
+- Model validations.
+- Utility functions.
+
+## Integration Tests
+
+Test interactions between:
+
+- Database and repositories.
+- Services and integrations.
+- Payme and payment services.
+- SMS and account services.
+- Channels and chat services.
+
+## API Tests
+
+Test:
+
+- Authentication.
+- Registration.
+- Advertisement creation.
+- Advertisement editing.
+- Search.
+- Favorites.
+- Chat.
+- Payments.
+- Reports.
+- Moderation.
+- Permissions.
+
+## Web Tests
+
+Test:
+
+- Homepage.
+- Registration and login.
+- Advertisement pages.
+- Search.
+- Advertisement creation.
+- Favorites.
+- Chat interface.
+- Profile.
+- Guest redirections.
+- Form validations.
+
+Preserve the original testing scenarios TC-01 through TC-12.
+
+Important acceptance tests must include:
+
+- Successful SMS registration.
+- Invalid or expired SMS code.
+- Advertisement creation.
+- Missing required fields.
+- Empty search results.
+- Real-time messaging.
+- Successful Payme transaction.
+- Failed payment.
+- Duplicate Payme callback.
+- Unauthorized advertisement editing.
+- Unauthorized admin access.
+- AI service failure with manual fallback.
+
+# 27. PROJECT DOCUMENTATION
+
+Generate a complete README.md.
+
+It must include:
+
+- Project overview.
+- Project architecture.
+- Technology stack.
+- Directory structure.
+- Explanation of architectural layers.
+- Installation.
+- Virtual environment setup.
+- Dependency installation.
+- Environment variable configuration.
+- PostgreSQL configuration.
+- Redis configuration.
+- Database migrations.
+- Creating a superuser.
+- Starting the Django website.
+- Starting the ASGI application.
+- Starting Redis.
+- Starting the background services if required.
+- API documentation.
+- Running tests.
+- Docker instructions.
+
+Also create architecture documentation.
+
+Explain how a request moves through the system.
+
+Example:
+
+HTTP Request
+→ Controller
+→ Form or Serializer Validation
+→ Service
+→ Repository
+→ Model
+→ PostgreSQL
+→ Service
+→ Controller
+→ HTML Response or JSON Response.
+
+# 28. REQUIREMENTS TRACEABILITY
+
+Create a requirements traceability matrix.
+
+For each functional requirement, identify:
+
+- Requirement ID.
+- Description.
+- Priority.
+- Django application.
+- Controller.
+- Service.
+- Model.
+- Repository.
+- Website page.
+- API endpoint.
+- Test case.
+
+Do the same for all non-functional requirements.
+
+This is important because every feature must be traceable to the original SRS.
+
+# 29. MERMAID DIAGRAMS
+
+Generate the following diagrams:
+
+1. System Architecture Diagram.
+2. Project Layer Communication Diagram.
+3. Database ER Diagram.
+4. Use Case Diagram.
+5. Advertisement Creation Sequence Diagram.
+6. Payme Payment Sequence Diagram.
+7. Chat Sequence Diagram.
+8. Advertisement Moderation Activity Diagram.
+
+Use Mermaid syntax.
+
+Each diagram must represent the actual UMUM implementation, not a generic marketplace.
+
+Explain each diagram in simple English.
+
+# 30. REQUIRED DEVELOPMENT PHASES
+
+Do not generate the whole project as one massive, unstructured code response.
+
+Develop it in clearly separated phases.
+
+## PHASE 1 — REQUIREMENTS ANALYSIS
+
+Read the SRS document.
+
+Extract:
+
+- All 22 functional requirements.
+- All 10 non-functional requirements.
+- All 8 Use Cases.
+- All 12 User Stories.
+- All database entities.
+- All API endpoints.
+- All user screens.
+- All original statuses.
+- MVP and non-MVP scope.
+
+Create a traceability matrix.
+
+Identify inconsistencies between the existing SRS and the proposed Django architecture.
+
+## PHASE 2 — SYSTEM ARCHITECTURE
+
+Design the complete architecture.
+
+Explain:
+
+- Django Website.
+- REST API.
+- Controllers.
+- Services.
+- Repositories.
+- Models.
+- Integrations.
+- Config.
+- Authentication.
+- Database communication.
+
+Generate architecture diagrams.
+
+## PHASE 3 — PROJECT FOUNDATION
+
+Create:
+
+- Django project.
+- Virtual environment instructions.
+- Requirements file.
+- Settings.
+- PostgreSQL connection.
+- Redis connection.
+- Jazzmin configuration.
+- Environment variables.
+- Docker configuration.
+- Base URLs.
+
+Make sure the project starts correctly.
+
+## PHASE 4 — DATABASE AND MODELS
+
+Create all models.
+
+Implement relationships, constraints, indexes, and enumerations.
+
+Generate and explain migrations.
+
+## PHASE 5 — SHARED BUSINESS LOGIC
+
+Implement repositories and services.
+
+Keep business logic independent from the web and API layers.
+
+## PHASE 6 — REST API
+
+Create:
+
+- Controllers.
+- Serializers.
+- Permissions.
+- URL routing.
+- API documentation.
+- Error handling.
+
+## PHASE 7 — DJANGO WEBSITE
+
+Create:
+
+- Base templates.
+- Homepage.
+- Authentication pages.
+- Search pages.
+- Advertisement pages.
+- Advertisement creation forms.
+- Favorites.
+- Profile.
+- Chat.
+- Payment pages.
+- Map page.
+- AI assistant page.
+
+Connect every page to the actual backend services.
+
+## PHASE 8 — INTEGRATIONS
+
+Implement:
+
+- SMS.
+- Payme.
+- AI.
+- Maps.
+- Storage.
+- WebSocket communication.
+
+Use sandbox or mock implementations when actual external credentials are unavailable.
+
+## PHASE 9 — ADMIN PANEL
+
+Configure Jazzmin.
+
+Implement user management, advertisement moderation, reports, and administrative statistics.
+
+## PHASE 10 — TESTING AND DOCUMENTATION
+
+Implement and run tests.
+
+Verify:
+
+- Application installation.
+- Database migrations.
+- Website startup.
+- API startup.
+- Admin login.
+- API functionality.
+- Security permissions.
+- Integration error handling.
+
+Complete README.md and architecture documentation.
+
+# 31. CODE GENERATION RULES
+
+Follow these rules strictly.
+
+1. Always show the complete file path before generating its code.
+
+2. Generate complete working code, not pseudocode.
+
+3. Do not skip important files.
+
+4. Do not use phrases such as "the rest is similar."
+
+5. Explain what each important file does.
+
+6. Explain why the file exists.
+
+7. Explain which other files it communicates with.
+
+8. Keep imports consistent.
+
+9. Use clear English names for files, classes, functions, and variables.
+
+10. Add useful comments.
+
+11. Follow Django conventions.
+
+12. Do not place all logic inside views.py.
+
+13. Do not put business logic inside models unnecessarily.
+
+14. Do not put database access logic inside controllers.
+
+15. Do not duplicate business logic between website and API.
+
+16. Do not expose private information.
+
+17. Do not generate fake implementations and claim they are production-ready.
+
+18. Every button and form in the website must have a real action.
+
+19. All code must use the specified technology stack.
+
+20. Keep the directory structure consistent throughout development.
+
+21. If a response becomes too long, finish at a logical file or module boundary and list the remaining files. Continue without regenerating completed code when asked.
+
+22. After implementing a phase, provide commands to run and verify it.
+
+# 32. FINAL EXPECTATION
+
+The completed UMUM platform must have:
+
+- A complete Django backend.
+- A complete Django Templates website.
+- A complete Django REST API.
+- A modular Controllers layer.
+- A modular Services layer.
+- A modular Models layer.
+- A modular Repositories layer.
+- A professional Config structure.
+- External integration modules.
+- PostgreSQL database.
+- Redis and real-time chat.
+- Payme integration.
+- SMS integration.
+- AI assistance.
+- OpenStreetMap and Leaflet integration.
+- Jazzmin 3.0.5 administration panel.
+- Automated tests.
+- Swagger/OpenAPI documentation.
+- Technical documentation.
+
+Most importantly, the entire architecture must be easy to understand.
+
+I need to know:
+
+- What each module does.
+- Why it exists.
+- Which operations it performs.
+- What data it receives.
+- What data it returns.
+- Which modules it communicates with.
+- Which requirements it implements.
+
+The project must be built using professional software engineering practices, but explained in a way that beginner and intermediate developers can understand.
+
+**FINAL OBJECTIVE:**
+
+Build UMUM as a complete Django Full-Stack Marketplace Platform, using one shared backend architecture for both the Django Templates website and the REST API.
+
+Do not start by generating hundreds of lines of code.
+
+Begin with PHASE 1 — REQUIREMENTS ANALYSIS, followed by PHASE 2 — SYSTEM ARCHITECTURE.
+
+Explain and obtain a clear understanding of the architecture before proceeding to implementation.

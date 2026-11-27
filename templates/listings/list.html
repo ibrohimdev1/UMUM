@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}E‘lonlar qidiruvi — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">E‘lonlar</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-3 sticky-top" style="top: 80px;">
+                <h5 class="fw-bold mb-3"><i class="fas fa-filter text-primary me-2"></i>Filtrlar</h5>
+                <form method="get" action="{% url 'listing_list' %}">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Kalit so‘z</label>
+                        <input type="text" name="q" class="form-control form-control-sm" value="{{ request.GET.q }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Kategoriya</label>
+                        <select name="category" class="form-select form-select-sm">
+                            <option value="">Barcha kategoriyalar</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Narx oralig‘i (UZS)</label>
+                        <div class="d-flex gap-2">
+                            <input type="number" name="min_price" class="form-control form-control-sm" placeholder="Min" value="{{ request.GET.min_price }}">
+                            <input type="number" name="max_price" class="form-control form-control-sm" placeholder="Max" value="{{ request.GET.max_price }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Shahar</label>
+                        <input type="text" name="city" class="form-control form-control-sm" placeholder="Masalan: Samarqand" value="{{ request.GET.city }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Saralash</label>
+                        <select name="ordering" class="form-select form-select-sm">
+                            <option value="newest" {% if request.GET.ordering == 'newest' %}selected{% endif %}>Yangi qo‘shilganlar</option>
+                            <option value="price_asc" {% if request.GET.ordering == 'price_asc' %}selected{% endif %}>Arzonroq</option>
+                            <option value="price_desc" {% if request.GET.ordering == 'price_desc' %}selected{% endif %}>Qimmatroq</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 btn-sm fw-bold rounded-pill">
+                        Qo‘llash
+                    </button>
+                    <a href="{% url 'listing_list' %}" class="btn btn-outline-secondary w-100 btn-sm rounded-pill mt-2">Tozalash</a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Listings Grid -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Natijalar ({{ listings.count }})</h5>
+                <a href="{% url 'map_view' %}" class="btn btn-outline-info btn-sm rounded-pill">
+                    <i class="fas fa-map-marker-alt me-1"></i> Xaritada ko‘rish
+                </a>
+            </div>
+
+            <div class="row g-4">
+                {% for listing in listings %}
+                    <div class="col-md-6 col-xl-4">
+                        {% include 'components/listing_card.html' with listing=listing %}
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search fs-1 text-secondary mb-3"></i>
+                        <h5>Hech qanday e‘lon topilmadi.</h5>
+                        <p class="text-secondary small">Filtrlarni o‘zgartirib qayta qidiring.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

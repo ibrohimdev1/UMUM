@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}E‘lonlar Xaritasi (Leaflet / OpenStreetMap) — UMUM{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 position-relative">
+    <div id="fullMap" style="height: calc(100vh - 70px); width: 100%;"></div>
+
+    <!-- Floating Filter Box on Top of Map -->
+    <div class="position-absolute top-0 start-0 m-3 z-3 bg-white p-3 rounded-4 shadow-lg" style="max-width: 320px;">
+        <h6 class="fw-bold mb-2"><i class="fas fa-map-marked-alt text-primary me-2"></i>Xaritadan qidiruv</h6>
+        <p class="small text-secondary mb-2">E‘lon belgisini bosing va to‘liq ma‘lumotni ko‘ring.</p>
+        <a href="{% url 'listing_list' %}" class="btn btn-outline-secondary btn-sm w-100 rounded-pill">
+            <i class="fas fa-list me-1"></i> Ro‘yxat ko‘rinishiga o‘tish
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        // Tashkent center
+        const map = L.map('fullMap').setView([41.311081, 69.240562], 12);
+
+        // 100% Free Tile Layers (No API Key Required)
+        const streetLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; <a href="https://www.esri.com">Esri</a> &mdash; Street Map',
+            maxZoom: 19
+        });
+
+        const hotLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Humanitarian OSM Team',
+            maxZoom: 19
+        });
+
+        const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; <a href="https://www.esri.com">Esri</a> &mdash; Topo Map',
+            maxZoom: 19
+        });
+
+        // Add street layer by default
+        streetLayer.addTo(map);
+
+        // Map layer switcher
+        L.control.layers({
+            "Ko‘cha xaritasi (Esri Street)": streetLayer,
+            "Rangli xarita (OSM HOT)": hotLayer,
+            "Topografik (Esri Topo)": topoLayer
+        }, null, { position: 'topright' }).addTo(map);
+
+        try {
+            const res = await fetch('/api/v1/listings/map');
+            const listings = await res.json();
+
+            listings.forEach(item => {
+                if (item.lat && item.lng) {
+                    const marker = L.marker([item.lat, item.lng]).addTo(map);
+                    const popupContent = `
+                        <div style="max-width: 200px;">
+                            <img src="${item.primary_image}" style="width: 100%; height: 110px; object-fit: cover; border-radius: 6px;" class="mb-2">
+                            <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">${item.title}</h6>
+                            <div class="text-primary fw-bold mb-2">${Math.round(item.price)} UZS</div>
+                            <a href="/listings/${item.id}/" class="btn btn-primary btn-sm w-100 rounded-pill text-white py-1" style="font-size: 0.8rem;">Ko‘rish</a>
+                        </div>
+                    `;
+                    marker.bindPopup(popupContent);
+                }
+            });
+        } catch(e) {
+            console.error("Error loading map listings:", e);
+        }
+    });
+</script>
+{% endblock %}

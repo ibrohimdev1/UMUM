@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Yordamchi — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 860px;">
+    <!-- Main Card -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+        <!-- Header -->
+        <div class="d-flex align-items-center mb-4">
+            <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 me-3 d-inline-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+                <i class="fas fa-magic fs-3"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-1">Sun‘iy Intellekt Yordamchisi</h3>
+                <p class="text-secondary small mb-0">Sun‘iy intellekt orqali e‘lon matnini boyiting, narxni tahlil qiling yoki jonli maslahat oling</p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-pills nav-fill mb-4 bg-light p-1 rounded-pill" id="aiTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded-pill fw-semibold py-2" id="listing-tab" data-bs-toggle="pill" data-bs-target="#tabListing" type="button" role="tab">
+                    <i class="fas fa-file-alt me-1"></i> E‘lon Tavsifi & Narx Tavsiyasi
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill fw-semibold py-2" id="chat-tab" data-bs-toggle="pill" data-bs-target="#tabChat" type="button" role="tab">
+                    <i class="fas fa-comments me-1"></i> AI Bilan Jonli Suhbat (Chatbot)
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="aiTabContent">
+            <!-- TAB 1: Listing Generator & Price Suggestion -->
+            <div class="tab-pane fade show active" id="tabListing" role="tabpanel">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">E‘lon sarlavhasi</label>
+                    <input type="text" id="aiTitle" class="form-control form-control-lg" placeholder="Masalan: Chevrolet Cobalt 2023 yoki iPhone 15 Pro Max">
+                    
+                    <!-- Quick Example Suggestions -->
+                    <div class="mt-2 d-flex flex-wrap gap-1 align-items-center">
+                        <small class="text-muted me-1">Tezkor misollar:</small>
+                        <button type="button" class="btn btn-sm btn-light border py-0 px-2 example-chip" data-title="Chevrolet Cobalt 2023 avtomat" data-desc="Yili 2023, 40000 km yurgan, oq rang, kraska toza, gaz ko‘rmagan">Chevrolet Cobalt 2023</button>
+                        <button type="button" class="btn btn-sm btn-light border py-0 px-2 example-chip" data-title="iPhone 15 Pro Max 256GB Natural Titanium" data-desc="Yangi, karobka-dokument bor, batareya 100%, qirilgan joyi yo‘q">iPhone 15 Pro Max</button>
+                        <button type="button" class="btn btn-sm btn-light border py-0 px-2 example-chip" data-title="Yunusobod 14-mavzeda 3 xonali kvartira" data-desc="Evroremont, 72 kv.m, 4-qavat, mebellari bilan, metro yaqin">3 xonali kvartira</button>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Qo‘shimcha ma‘lumotlar (ixtiyoriy)</label>
+                    <textarea id="aiRawDesc" class="form-control" rows="3" placeholder="Masalan: Holati a‘lo, kraskasi toza, kam haydalgan, hamma funksiyalari ishlaydi..."></textarea>
+                </div>
+
+                <div class="d-flex gap-2 mb-4 flex-wrap">
+                    <button type="button" id="btnImproveDesc" class="btn btn-primary fw-bold px-4 py-2 rounded-pill shadow-sm">
+                        <i class="fas fa-wand-magic-sparkles me-1"></i> Tavsifni boyitish
+                    </button>
+                    <button type="button" id="btnSuggestPrice" class="btn btn-warning fw-bold px-4 py-2 rounded-pill text-dark shadow-sm">
+                        <i class="fas fa-chart-line me-1"></i> Bozor narxini hisoblash
+                    </button>
+                </div>
+
+                <!-- AI Output Box -->
+                <div id="aiResultBox" class="d-none bg-light p-4 rounded-4 border">
+                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                        <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-robot me-2"></i>AI Natijasi:</h5>
+                        <button type="button" id="btnCopyResult" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 0.8rem;">
+                            <i class="far fa-copy me-1"></i> Nusxalash
+                        </button>
+                    </div>
+                    <div id="aiResultContent" class="lh-lg"></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: Live AI Chatbot -->
+            <div class="tab-pane fade" id="tabChat" role="tabpanel">
+                <div class="border rounded-4 p-3 bg-light d-flex flex-column" style="height: 460px;">
+                    <!-- Chat Messages List -->
+                    <div id="chatMessages" class="flex-grow-1 overflow-auto p-2 d-flex flex-column gap-3">
+                        <div class="d-flex align-items-start gap-2">
+                            <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                <i class="fas fa-robot small"></i>
+                            </div>
+                            <div class="bg-white p-3 rounded-4 shadow-sm border" style="max-width: 80%;">
+                                <p class="mb-0 small">Assalomu alaykum! Men UMUM platformasining aqlli AI maslahatchisiman. Menga istalgan savol berishingiz mumkin: mahsulotlar narxlari, texnik xususiyatlari yoki tavsiyalar haqida so‘rang!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Prompt Suggestions -->
+                    <div class="pt-2 pb-1 border-top mt-2 d-flex gap-1 flex-wrap">
+                        <small class="text-muted align-self-center me-1">Savollar:</small>
+                        <button type="button" class="btn btn-sm btn-white border py-0 px-2 quick-chat-btn" data-msg="Cobalt bilan Gentra qaysi biri yaxshiroq?">Cobalt vs Gentra?</button>
+                        <button type="button" class="btn btn-sm btn-white border py-0 px-2 quick-chat-btn" data-msg="Toshkentda 1 xonali kvartiralar o‘rtacha qancha turadi?">Kvartiralar narxi?</button>
+                        <button type="button" class="btn btn-sm btn-white border py-0 px-2 quick-chat-btn" data-msg="iPhone 15 Pro Max ning afzalliklari nimada?">iPhone 15 Pro Max?</button>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <form id="chatForm" class="d-flex gap-2 mt-2">
+                        <input type="text" id="chatInput" class="form-control rounded-pill" placeholder="Savolingizni yozing (Masalan: Spark qancha turadi?)..." autocomplete="off">
+                        <button type="submit" id="btnSendChat" class="btn btn-primary rounded-pill px-4 fw-bold">
+                            <i class="fas fa-paper-plane me-1"></i> Yuborish
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- Markdown Parser -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // --- TAB 1: Listing Description & Price ---
+        const titleInput = document.getElementById('aiTitle');
+        const descInput = document.getElementById('aiRawDesc');
+        const resultBox = document.getElementById('aiResultBox');
+        const resultContent = document.getElementById('aiResultContent');
+        const copyBtn = document.getElementById('btnCopyResult');
+        let rawOutputText = '';
+
+        document.querySelectorAll('.example-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                titleInput.value = this.getAttribute('data-title');
+                descInput.value = this.getAttribute('data-desc');
+            });
+        });
+
+        copyBtn.addEventListener('click', function() {
+            if (!rawOutputText) return;
+            navigator.clipboard.writeText(rawOutputText).then(() => {
+                const prev = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check text-success me-1"></i> Nusxalandi!';
+                setTimeout(() => { copyBtn.innerHTML = prev; }, 2000);
+            });
+        });
+
+        document.getElementById('btnImproveDesc').addEventListener('click', async function() {
+            const title = titleInput.value.trim();
+            const raw = descInput.value.trim();
+            if (!title) { alert('Iltimos, e‘lon sarlavhasini kiriting!'); return; }
+
+            resultBox.classList.remove('d-none');
+            resultContent.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin fa-2x text-primary mb-2"></i><br><span class="text-muted">E‘lon matni tuzilmoqda...</span></div>';
+
+            try {
+                const res = await fetch('/api/v1/ai/improve-description', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title, raw_description: raw })
+                });
+                const data = await res.json();
+                if (data.improved_description) {
+                    rawOutputText = data.improved_description;
+                    resultContent.innerHTML = window.marked ? marked.parse(data.improved_description) : data.improved_description;
+                } else {
+                    resultContent.innerHTML = '<div class="alert alert-danger mb-0">Tavsifni yaratishda xatolik yuz berdi.</div>';
+                }
+            } catch(e) {
+                resultContent.innerHTML = '<div class="alert alert-danger mb-0">Server bilan aloqa uzildi. Qaytadan urinib ko‘ring.</div>';
+            }
+        });
+
+        document.getElementById('btnSuggestPrice').addEventListener('click', async function() {
+            const title = titleInput.value.trim();
+            if (!title) { alert('Iltimos, e‘lon sarlavhasini kiriting!'); return; }
+
+            resultBox.classList.remove('d-none');
+            resultContent.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin fa-2x text-warning mb-2"></i><br><span class="text-muted">Bozor narxlari tahlil qilinmoqda...</span></div>';
+
+            try {
+                const res = await fetch('/api/v1/ai/suggest-price', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title })
+                });
+                const data = await res.json();
+                if (data.suggested_price) {
+                    const avg = Number(data.suggested_price).toLocaleString();
+                    const min = Number(data.min_price).toLocaleString();
+                    const max = Number(data.max_price).toLocaleString();
+                    const cur = data.currency || 'UZS';
+                    rawOutputText = `${title}: Tavsiya etilgan o‘rtacha narx: ${avg} ${cur} (Min: ${min}, Max: ${max}). ${data.explanation}`;
+                    resultContent.innerHTML = `
+                        <div class="mb-3">
+                            <span class="text-secondary small d-block">Tavsiya etilgan o‘rtacha narx:</span>
+                            <span class="badge bg-success fs-5 px-3 py-2 mt-1 shadow-sm">${avg} ${cur}</span>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="bg-white p-2 rounded-3 border">
+                                    <span class="text-muted small d-block">Minimal narx:</span>
+                                    <strong class="text-dark">${min} ${cur}</strong>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-white p-2 rounded-3 border">
+                                    <span class="text-muted small d-block">Maksimal narx:</span>
+                                    <strong class="text-dark">${max} ${cur}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="small mb-2">
+                            <b>Ishonchlilik darajasi:</b> <span class="badge bg-primary rounded-pill">${data.confidence || '90%'}</span>
+                        </div>
+                        <div class="alert alert-info border-0 py-2 px-3 small mb-0 rounded-3">
+                            <i class="fas fa-info-circle me-1"></i> ${data.explanation}
+                        </div>
+                    `;
+                } else {
+                    resultContent.innerHTML = '<div class="alert alert-danger mb-0">Narx tavsiyasini olishda xatolik yuz berdi.</div>';
+                }
+            } catch(e) {
+                resultContent.innerHTML = '<div class="alert alert-danger mb-0">Server bilan aloqa uzildi. Qaytadan urinib ko‘ring.</div>';
+            }
+        });
+
+        // --- TAB 2: Interactive AI Chatbot ---
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        document.querySelectorAll('.quick-chat-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                chatInput.value = this.getAttribute('data-msg');
+                chatForm.dispatchEvent(new Event('submit'));
+            });
+        });
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+
+            // Append User message bubble
+            chatMessages.innerHTML += `
+                <div class="d-flex align-items-start gap-2 justify-content-end">
+                    <div class="bg-primary text-white p-3 rounded-4 shadow-sm" style="max-width: 80%;">
+                        <p class="mb-0 small">${msg}</p>
+                    </div>
+                    <div class="bg-secondary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                        <i class="fas fa-user small"></i>
+                    </div>
+                </div>
+            `;
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Append Loading bubble
+            const loadingId = 'loading-' + Date.now();
+            chatMessages.innerHTML += `
+                <div id="${loadingId}" class="d-flex align-items-start gap-2">
+                    <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                        <i class="fas fa-robot small"></i>
+                    </div>
+                    <div class="bg-white p-3 rounded-4 shadow-sm border" style="max-width: 80%;">
+                        <p class="mb-0 small text-muted"><i class="fas fa-spinner fa-spin me-2"></i>Javob tayyorlanmoqda...</p>
+                    </div>
+                </div>
+            `;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                const res = await fetch('/api/v1/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg })
+                });
+                const data = await res.json();
+                const loadingElem = document.getElementById(loadingId);
+                if (loadingElem) loadingElem.remove();
+
+                const parsedReply = window.marked ? marked.parse(data.reply || '') : data.reply;
+                chatMessages.innerHTML += `
+                    <div class="d-flex align-items-start gap-2">
+                        <div class="bg-primary text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                            <i class="fas fa-robot small"></i>
+                        </div>
+                        <div class="bg-white p-3 rounded-4 shadow-sm border" style="max-width: 80%;">
+                            <div class="small mb-0 lh-base">${parsedReply}</div>
+                        </div>
+                    </div>
+                `;
+            } catch(err) {
+                const loadingElem = document.getElementById(loadingId);
+                if (loadingElem) loadingElem.remove();
+                chatMessages.innerHTML += `
+                    <div class="d-flex align-items-start gap-2">
+                        <div class="bg-danger text-white rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                            <i class="fas fa-exclamation-triangle small"></i>
+                        </div>
+                        <div class="bg-white p-3 rounded-4 shadow-sm border border-danger" style="max-width: 80%;">
+                            <p class="mb-0 small text-danger">Kechirasiz, javob olishda xatolik yuz berdi. Iltimos qaytadan urinib ko‘ring.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    });
+</script>
+{% endblock %}

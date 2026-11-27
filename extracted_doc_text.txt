@@ -1,0 +1,902 @@
+UMUM
+Hamma narsa bir joyda — e‘lonlar platformasi
+SRS / PRD VA TIZIM ARXITEKTURASI HUJJATI
+Tayyorlaganlar:
+Sharafiddinov Saloxiddin
+Hasanov Ibrohim
+Guruh: DI-1-25
+2026-yil  |  Versiya 1.0
+1. Loyiha haqida qisqacha ma’lumot
+UMUM — foydalanuvchilarga tovar va xizmatlar bo‘yicha e‘lonlarni joylash, qidirish, sotuvchi bilan bog‘lanish va to‘lovni amalga oshirish imkonini beradigan e‘lonlar platformasi. “UMUM” so‘zi “umumiy”, ya’ni “hamma narsa bir joyda” ma’nosini bildiradi: transport, ko‘chmas mulk, elektronika, xizmatlar, ish va boshqa yo‘nalishlar yagona platformada jamlanadi.
+Platforma veb va mobil ilova ko‘rinishida ishlaydi. Unda xarita orqali e‘lonlarni ko‘rish, sotuvchi va xaridor o‘rtasida chat, Payme orqali to‘lov, SMS bildirishnomalar hamda e‘lon yozishda yordam beradigan sun’iy intellekt (AI) agenti mavjud bo‘ladi.
+Loyiha nomi
+UMUM
+Loyiha turi
+E‘lonlar platformasi (classifieds marketplace), veb + mobil
+Hujjat turi
+SRS / PRD va tizim arxitekturasi
+Tayyorlaganlar
+Sharafiddinov Saloxiddin, Hasanov Ibrohim
+Guruh
+DI-1-25
+Fan
+Dasturiy injiniring (mustaqil ish)
+Maqsadli auditoriya
+20–50 yoshdagi mustaqil kattalar
+Asosiy raqobatchi
+OLX
+Texnologiyalar
+Backend: Java (Spring Boot); Frontend: TypeScript (React/Next.js, React Native); Baza: PostgreSQL
+Muddat
+8 hafta hujjatlashtirish + 8 hafta ishlab chiqish
+Byudjet
+Yo‘q (o‘quv loyihasi)
+Versiya / Sana
+1.0 / 2026-yil
+2. Jamoa va Scrum rollari
+Loyiha ikki kishilik jamoa tomonidan Scrum metodologiyasi asosida, 2 haftalik sprintlarda ishlab chiqiladi. Har bir jamoa a’zosi bir nechta rolni birlashtiradi.
+Ism-familiya
+Rollar
+Mas’uliyat
+Sharafiddinov Saloxiddin
+Product Owner
+Backend Developer
+Talablarni belgilash, Product Backlog va ustuvorliklarni yuritish, yakuniy natijani qabul qilish.
+Java API, bron/buyurtma qoidalari, ma’lumotlar bazasi, Payme va SMS integratsiyasi, xavfsizlik.
+Hasanov Ibrohim
+Scrum Master
+Frontend Developer
+Sprint rejalash, kundalik uchrashuvlar, to‘siqlarni bartaraf etish, jarayon intizomi.
+Veb va mobil interfeys, xarita va chat ekranlari, API bilan integratsiya.
+2.1. Scrum marosimlari
+Marosim
+Davriyligi
+Maqsad
+Sprint Planning
+Har sprint boshida (2 soat)
+Sprint maqsadi va vazifalarini tanlash
+Daily Scrum
+Har kuni (10–15 daqiqa)
+Kecha nima qilindi, bugun nima qilinadi, to‘siqlar
+Sprint Review
+Sprint oxirida (1 soat)
+Tayyor natijani namoyish qilish
+Sprint Retrospective
+Sprint oxirida (1 soat)
+Jarayonni yaxshilash bo‘yicha xulosalar
+3. Muammo, maqsad va qamrov
+3.1. Mavjud muammolar
+E‘lonlar turli kanallarda (Telegram guruhlari, ijtimoiy tarmoqlar, bir nechta saytlar) tarqoq joylashgan va ularni qidirish qiyin.
+Soxta va takroriy e‘lonlar ko‘p, ularni nazorat qilish va foydalanuvchi ishonchini ta’minlash murakkab.
+Sotuvchi va xaridor o‘rtasida xavfsiz to‘lov hamda ishonchli aloqa vositasi yetishmaydi.
+E‘lon matnini sifatli yozish va narxni to‘g‘ri belgilash ko‘pchilik uchun qiyin.
+E‘lon joylashuvini xaritada ko‘rib, yaqin atrofdagi takliflarni topish imkoniyati cheklangan.
+3.2. Loyiha maqsadi
+Foydalanuvchilarga tez va qulay e‘lon joylash, aniq qidirish, xaritada ko‘rish, chat orqali bog‘lanish va Payme orqali to‘lash imkonini beradigan, AI yordamchisi bilan boyitilgan yagona e‘lonlar platformasini yaratish. Shuningdek, jamoa a’zolari dasturiy injiniring jarayonini (talablar, loyihalash, UML, Scrum, sinov) amaliyotda o‘zlashtiradi.
+3.3. Qamrov
+Qamrovga kiradi (MVP)
+Dastlabki versiyadan tashqarida
+Ro‘yxatdan o‘tish va tizimga kirish (telefon + SMS tasdiq)
+Biznes (do‘kon) akkauntlari
+E‘lon qo‘shish, tahrirlash, arxivlash
+Reklama paneli va banner joylashtirish
+Kategoriyalar, qidiruv va filtrlar
+Yetkazib berish (logistika) integratsiyasi
+Xarita orqali e‘lonlarni ko‘rish
+Pulni ushlab turish (escrow) va nizolarni hal qilish
+Chat (xaridor ↔ sotuvchi)
+Bir nechta to‘lov provayderi
+Payme orqali to‘lov
+Video qo‘ng‘iroq va ovozli xabarlar
+SMS bildirishnomalar
+Rasm bo‘yicha avtomatik narxlash (AI)
+AI agent: tavsif yaxshilash, narx tavsiyasi, qidiruv yordami
+Ko‘p mamlakatli soliq va hisobot
+Moderatsiya, shikoyatlar, admin panel va hisobotlar
+—
+4. Raqobatchilar tahlili
+Bozordagi asosiy raqobatchi — OLX. Quyidagi jadval UMUM rejalashtirilgan imkoniyatlarini OLX bilan umumiy darajada solishtiradi. Taqqoslash jamoaning mavjud ochiq ma’lumotlar asosidagi dastlabki bahosi bo‘lib, amaliy ishga tushirishdan oldin yangilanishi lozim.
+Imkoniyat
+OLX
+UMUM (reja)
+E‘lonlarni joylash va qidirish
+Bor
+Bor
+Kategoriyalar va filtrlar
+Bor
+Bor
+Ichki chat
+Bor
+Bor (real vaqt)
+Payme orqali to‘lov
+Cheklangan
+Bor (MVP)
+Xarita orqali e‘lon ko‘rish
+Qisman
+Asosiy imkoniyat
+AI yordamchi (tavsif, narx)
+Yo‘q yoki cheklangan
+Bor
+SMS bildirishnomalar
+Bor
+Bor
+Moderatsiya va shikoyatlar
+Bor
+Bor
+UMUM’ning farqlovchi jihatlari: AI agent yordami, xaritaga yo‘naltirilgan qidiruv va to‘lovning platforma ichida bo‘lishi.
+4.1. Daromad modeli (kelajak uchun)
+E‘lonni “TOP” ga chiqarish (pullik xizmat).
+Pullik qo‘shimcha e‘lon limiti.
+Biznes (do‘kon) akkauntlari uchun obuna.
+Bu yo‘nalishlar o‘quv loyihasining MVP doirasiga kirmaydi va kelajakdagi imkoniyat sifatida ko‘rsatilgan.
+5. Foydalanuvchilar va rollar
+Platformaning asosiy auditoriyasi — 20–50 yoshdagi mustaqil kattalar: tovar sotuvchilar, xaridorlar, xizmat ko‘rsatuvchilar.
+Rol
+Huquq va vazifalar
+Mehmon (Guest)
+Ro‘yxatdan o‘tmagan foydalanuvchi. Akkaunt ochmasdan, vaqtincha e‘lonlarni qidirishi, ko‘rishi va xaritada ko‘rishi mumkin. “Sotib olish”, “E‘lon joylash”, “Yozish” yoki “Sevimlilar” tugmalarini bossa, tizim uni ro‘yxatdan o‘tish sahifasiga yo‘naltiradi. Mehmon uchun serverda alohida akkaunt yaratilmaydi.
+Foydalanuvchi (sotuvchi/xaridor)
+Telefon raqami SMS-kod bilan tasdiqlangan va serverda o‘z akkauntiga ega foydalanuvchi. Bitta akkaunt bilan ham xaridor, ham sotuvchi bo‘la oladi. Xaridor sifatida: qidirish, chat, Payme orqali to‘lov, sevimlilar, shikoyat, AI yordamchi. Sotuvchi bo‘lish uchun (birinchi e‘lonni joylashdan oldin) bir marta “Sotuvchi profili”ni to‘ldiradi: to‘liq ism, shahar, aloqa ma’lumoti.
+Administrator
+Moderator vazifasini ham bajaradi: e‘lonlarni tekshirish (tasdiqlash/rad etish), shikoyatlarni ko‘rib chiqish, qoidabuzar e‘lon va foydalanuvchilarni bloklash, foydalanuvchilarni boshqarish, kategoriyalar va tizim sozlamalari, audit jurnali, hisobotlar.
+Tashqi tizimlar
+Payme (to‘lov), SMS xizmati (xabar yuborish), AI xizmati (matn tahlili), xarita xizmati.
+6. Funksional talablar (FR)
+Ustuvorlik MoSCoW usulida belgilangan: Must — majburiy, Should — muhim, Could — ixtiyoriy.
+ID
+Modul
+Talab
+Ustuvorlik
+FR-01
+Ro‘yxatdan o‘tish
+Foydalanuvchi telefon raqami va SMS-kod orqali ro‘yxatdan o‘tishi va tizimga kirishi kerak.
+Must
+FR-02
+Profil
+Foydalanuvchi ismi, rasmi va aloqa ma’lumotlarini tahrirlay olishi kerak.
+Must
+FR-03
+E‘lon qo‘shish
+Foydalanuvchi sarlavha, tavsif, narx, kategoriya, rasmlar va joylashuv bilan e‘lon yaratishi kerak.
+Must
+FR-04
+E‘lonni boshqarish
+Foydalanuvchi o‘z e‘lonlarini tahrirlashi, arxivlashi va o‘chirishi mumkin.
+Must
+FR-05
+Kategoriyalar
+E‘lonlar ierarxik kategoriyalar bo‘yicha tartiblanishi kerak.
+Must
+FR-06
+Qidiruv va filtr
+Kalit so‘z, kategoriya, narx oralig‘i, shahar va saralash bo‘yicha qidirish mumkin bo‘lishi kerak.
+Must
+FR-07
+E‘lonni ko‘rish
+E‘lon sahifasida rasmlar, tavsif, narx, sotuvchi ma’lumoti va xarita ko‘rsatiladi.
+Must
+FR-08
+Xarita
+E‘lonlar xaritada belgilar ko‘rinishida ko‘rsatilishi va hudud bo‘yicha qidirilishi kerak.
+Must
+FR-09
+Sevimlilar
+Foydalanuvchi e‘lonlarni sevimlilar ro‘yxatiga qo‘sha va olib tashlay olishi kerak.
+Should
+FR-10
+Chat
+Xaridor va sotuvchi e‘lon doirasida real vaqtda xabar almashishi kerak.
+Must
+FR-11
+To‘lov
+Tizim Payme orqali to‘lovni boshlashi, javobini tekshirishi va tranzaksiya holatini saqlashi kerak.
+Must
+FR-12
+Takroriy to‘lovdan himoya
+Bitta buyurtma uchun to‘lov so‘rovlari takrorlansa, tizim ularni xavfsiz (idempotent) qayta ishlashi kerak.
+Must
+FR-13
+SMS bildirishnoma
+Tasdiqlash kodi, to‘lov holati va e‘lon moderatsiyasi natijasi haqida SMS yuborilishi kerak.
+Must
+FR-14
+AI yordamchi
+AI agent e‘lon tavsifini yaxshilashi, narx tavsiya qilishi va qidiruvda yordam berishi kerak.
+Should
+FR-15
+Moderatsiya
+Yangi va tahrirlangan e‘lonlar administrator tekshiruvidan o‘tgach e‘lon qilinadi.
+Must
+FR-16
+Shikoyat
+Foydalanuvchi e‘lon yoki foydalanuvchi ustidan sabab ko‘rsatib shikoyat yubora olishi kerak.
+Should
+FR-17
+Admin panel
+Administrator foydalanuvchilar, kategoriyalar va sozlamalarni boshqarishi kerak.
+Must
+FR-18
+Hisobotlar
+Administrator e‘lonlar, foydalanuvchilar va to‘lovlar bo‘yicha statistikani ko‘ra olishi kerak.
+Should
+FR-19
+Ko‘p tillilik
+Interfeys o‘zbek, rus va ingliz tillarini qo‘llab-quvvatlashi kerak.
+Could
+FR-20
+Audit jurnali
+Muhim amallar (to‘lov, moderatsiya, rol o‘zgarishi) vaqt belgisi bilan yozib borilishi kerak.
+Should
+FR-21
+Mehmon rejimi
+Ro‘yxatdan o‘tmagan foydalanuvchi akkauntsiz e‘lonlarni ko‘ra olishi kerak. Himoyalangan amal (sotib olish, e‘lon joylash, chat, sevimlilar) tanlansa, tizim uni ro‘yxatdan o‘tish sahifasiga yo‘naltiradi va muvaffaqiyatli kirgach avvalgi amalga qaytaradi.
+Must
+FR-22
+Sotuvchi profili
+Xaridor birinchi e‘lonini joylamoqchi bo‘lsa, avval bir marta Sotuvchi profilini (to‘liq ism, shahar, aloqa ma’lumoti) to‘ldirishi kerak. Shu bilan e‘lonlarga ishonch ta’minlanadi.
+Must
+7. Nofunksional talablar (NFR)
+ID
+Kategoriya
+Mezon
+NFR-01
+Unumdorlik
+Qidiruv so‘rovlarining 95 foizi normal yuklamada 2 soniya ichida javob berishi maqsad qilinadi.
+NFR-02
+Mavjudlik
+Xizmat oyiga 99% ishlash maqsadi qo‘yiladi; haqiqiy ko‘rsatkich monitoring bilan o‘lchanadi.
+NFR-03
+Xavfsizlik
+Parollar/tokenlar xavfsiz saqlanadi (BCrypt, JWT); barcha trafik HTTPS/TLS orqali himoyalanadi.
+NFR-04
+Maxfiylik
+Faqat zarur shaxsiy ma’lumotlar yig‘iladi; ruxsat rollar bo‘yicha cheklanadi.
+NFR-05
+Ishonchlilik
+To‘lov va buyurtma jarayoni tranzaksiya va takroriy so‘rovni xavfsiz qayta ishlash qoidalariga ega.
+NFR-06
+Kengayuvchanlik
+Arxitektura qatlamlarga ajratilgan bo‘lib, yangi modul qo‘shish mavjud kodni buzmasligi kerak.
+NFR-07
+Qulaylik (Usability)
+Asosiy amallar (qidirish, e‘lon qo‘shish) 3–4 qadamda bajarilishi; interfeys mobil qurilmalarga moslashgan bo‘lishi kerak.
+NFR-08
+Audit
+To‘lov, moderatsiya va administrator amallari jurnalga yoziladi.
+NFR-09
+Moslashuvchanlik
+Veb zamonaviy brauzerlarda, mobil ilova Android va iOS’da ishlashi kerak.
+NFR-10
+Xizmat ko‘rsatish
+Kod versiyalash (Git), avtomatik testlar va hujjatlashtirilgan API (OpenAPI/Swagger) bo‘lishi kerak.
+8. Use Case modeli
+Quyida tizimning asosiy aktorlari va foydalanish holatlari (Use Case) keltirilgan. Avval umumiy diagramma, so‘ng muhim holatlarning batafsil tavsifi beriladi.
+8.1. Use Case diagrammasi
+ UMUM platfo“rmasining Use Case diagrammasi
+Eslatma: punktir chiziq («include») — shu amal uchun avval tizimga kirish (ro‘yxatdan o‘tish) shart ekanini bildiradi. Mehmon faqat qidirish, ko‘rish va xaritada ko‘rishni akkauntsiz bajaradi.
+8.2. Use Case tavsiflari
+UC-01. Ro‘yxatdan o‘tish / Kirish
+Aktorlar
+Mehmon, SMS xizmati
+Old shart
+Foydalanuvchi himoyalangan amalni (sotib olish, e‘lon joylash, chat, sevimlilar) tanlagan.
+Asosiy oqim
+1. Mehmon e‘lonlarni akkauntsiz ko‘radi va “Sotib olish” yoki “E‘lon joylash” tugmasini bosadi.
+2. Tizim uni ro‘yxatdan o‘tish sahifasiga yo‘naltiradi.
+3. Telefon raqami kiritiladi, tizim SMS-kod yuboradi.
+4. Foydalanuvchi kodni kiritadi, tizim tekshiradi.
+5. Tizim serverda shu foydalanuvchi uchun alohida akkaunt yaratadi (yoki mavjud akkauntga kiritadi).
+6. Foydalanuvchi avval bosgan amalga qaytariladi.
+Muqobil oqim
+Kod noto‘g‘ri yoki muddati o‘tgan: tizim xato ko‘rsatadi va qayta yuborish imkonini beradi (urinishlar soni cheklanadi).
+Natija
+Foydalanuvchi autentifikatsiyadan o‘tdi, JWT token berildi.
+UC-02. E‘lon qo‘shish
+Aktorlar
+Foydalanuvchi, AI agent
+Old shart
+Foydalanuvchi tizimga kirgan. Birinchi e‘londan oldin Sotuvchi profili to‘ldirilgan bo‘lishi kerak.
+Asosiy oqim
+1. Birinchi marta bo‘lsa, foydalanuvchi Sotuvchi profilini to‘ldiradi (bir martalik).
+2. Kategoriya tanlanadi.
+3. Sarlavha, tavsif, narx, rasm va joylashuv kiritiladi.
+4. (Ixtiyoriy) AI tavsifni yaxshilaydi va narx tavsiya qiladi.
+5. Foydalanuvchi e‘lonni yuboradi.
+6. E‘lon MODERATSIYA holatida saqlanadi.
+Muqobil oqim
+Majburiy maydon to‘ldirilmagan: tizim tegishli maydonni belgilaydi va saqlashga yo‘l qo‘ymaydi.
+Natija
+E‘lon yaratildi va administrator navbatiga tushdi.
+UC-03. E‘lonlarni qidirish va filtrlash
+Aktorlar
+Mehmon, Foydalanuvchi
+Old shart
+Mavjud emas.
+Asosiy oqim
+1. Foydalanuvchi kalit so‘z yoki kategoriyani tanlaydi.
+2. Narx, shahar, saralash filtrlari qo‘llaniladi.
+3. Tizim mos e‘lonlar ro‘yxatini qaytaradi.
+Muqobil oqim
+Natija topilmadi: tizim “E‘lon topilmadi” xabarini va o‘xshash takliflarni ko‘rsatadi.
+Natija
+Mos e‘lonlar ro‘yxati ko‘rsatildi.
+UC-04. Chat orqali yozishish
+Aktorlar
+Foydalanuvchi
+Old shart
+Foydalanuvchi tizimga kirgan; e‘lon faol.
+Asosiy oqim
+1. Xaridor e‘lon sahifasida “Yozish” tugmasini bosadi.
+2. Tizim chat yaratadi yoki mavjudini ochadi.
+3. Tomonlar real vaqtda xabar almashadi.
+4. Yangi xabar haqida bildirishnoma yuboriladi.
+Muqobil oqim
+Foydalanuvchi bloklangan: xabar yuborish rad etiladi.
+Natija
+Xabarlar saqlandi va ikkala tomonga ko‘rinadi.
+UC-05. Payme orqali to‘lov
+Aktorlar
+Xaridor, Payme
+Old shart
+Xaridor tizimga kirgan; e‘lon faol va to‘lov yoqilgan.
+Asosiy oqim
+1. Xaridor “To‘lash” tugmasini bosadi.
+2. Tizim buyurtmani PENDING holatida yaratadi.
+3. Payme to‘lov havolasi ochiladi.
+4. Xaridor to‘lovni amalga oshiradi.
+5. Payme tizimga to‘lov natijasini yuboradi.
+6. Tizim buyurtma holatini PAID qiladi va SMS yuboradi.
+Muqobil oqim
+To‘lov muvaffaqiyatsiz: buyurtma FAILED holatiga o‘tadi, xaridorga xabar beriladi.
+Natija
+To‘lov tasdiqlandi, holat saqlandi.
+UC-06. E‘lonlarni moderatsiya qilish
+Aktorlar
+Administrator
+Old shart
+Administrator tizimga kirgan.
+Asosiy oqim
+1. Administrator MODERATSIYA navbatini ochadi.
+2. E‘lonni ko‘rib chiqadi.
+3. Tasdiqlaydi yoki sabab ko‘rsatib rad etadi.
+4. Foydalanuvchiga bildirishnoma yuboriladi.
+Muqobil oqim
+Rad etilgan e‘lon tahrirlangach qayta moderatsiyaga yuboriladi.
+Natija
+E‘lon ACTIVE yoki REJECTED holatiga o‘tdi.
+UC-07. AI yordamchidan foydalanish
+Aktorlar
+Foydalanuvchi, AI agent
+Old shart
+Foydalanuvchi tizimga kirgan.
+Asosiy oqim
+1. Foydalanuvchi matn yoki so‘rov kiritadi.
+2. Backend AI xizmatiga so‘rov yuboradi.
+3. AI tavsif/narx tavsiyasi yoki qidiruv yordamini qaytaradi.
+4. Foydalanuvchi natijani qabul qiladi yoki rad etadi.
+Muqobil oqim
+AI xizmati javob bermasa: tizim foydalanuvchiga jarayonni qo‘lda davom ettirishni taklif qiladi.
+Natija
+Foydalanuvchi natijani e‘londa ishlatdi yoki rad etdi.
+UC-08. Shikoyat yuborish
+Aktorlar
+Foydalanuvchi, Administrator
+Old shart
+Foydalanuvchi tizimga kirgan.
+Asosiy oqim
+1. Foydalanuvchi e‘londa “Shikoyat” ni bosadi.
+2. Sabab tanlanadi va izoh yoziladi.
+3. Shikoyat administrator navbatiga tushadi.
+4. Administrator ko‘rib chiqib, qaror qabul qiladi.
+Muqobil oqim
+Bir foydalanuvchi bir e‘londan takroriy shikoyat yubora olmaydi.
+Natija
+Shikoyat qayd etildi va ko‘rib chiqildi.
+9. UML diagrammalari
+Quyidagi diagrammalar tizim obyektlari, xabarlar ketma-ketligi va e‘lon joylash jarayonini ko‘rsatadi. Use Case diagrammasi 8-bo‘limda keltirilgan.
+9.1. Class Diagram
+Tizimdagi asosiy klasslar, atributlar, metodlar va ular o‘rtasidagi bog‘lanishlar.
+UMUM platfo“rmasining Class diagrammasi
+9.2. Sequence Diagram
+Xaridor Payme orqali to‘lov qilganda ilova, backend, baza, Payme va SMS xizmati o‘rtasidagi xabarlar ketma-ketligi.
+ To‘lov jarayoni Sequence diagrammasi
+9.3. Activity Diagram
+E‘lon joylash va moderatsiyadan o‘tish jarayonining bosqichlari va qarorlar nuqtalari.
+E‘lon joylash Activity diagrammasi
+10. Tizim arxitekturasi
+UMUM klient–server arxitekturasiga asoslangan: frontend (veb va mobil) REST API va WebSocket orqali Java backend bilan ishlaydi; backend PostgreSQL bazasi va tashqi xizmatlar (Payme, SMS, AI, xarita) bilan bog‘lanadi. Backend qatlamli (Controller → Service → Repository) tuzilishga ega.
+10.1. Tanlangan texnologiyalar
+Qatlam
+Texnologiya
+Vazifa
+Frontend (veb)
+TypeScript, React / Next.js, Tailwind CSS
+Qidiruv, e‘lon sahifalari, chat, admin panel
+Frontend (mobil)
+TypeScript, React Native (Expo)
+Android va iOS ilova; veb bilan umumiy til va mantiq
+Backend
+Java 21, Spring Boot 3, Spring Security (JWT), Spring Data JPA
+REST API, biznes qoidalari, autentifikatsiya
+Real vaqt (chat)
+Spring WebSocket (STOMP)
+Chat xabarlarini real vaqtda yetkazish
+Ma’lumotlar bazasi
+PostgreSQL 16, Flyway (migratsiya)
+Barcha asosiy ma’lumotlarni saqlash
+Fayl saqlash
+S3-mos xizmat (masalan, MinIO / bulutli saqlash)
+E‘lon rasmlari
+Xarita
+OpenStreetMap + Leaflet (veb), react-native-maps (mobil)
+E‘lonlarni xaritada ko‘rsatish
+To‘lov
+Payme Merchant API (JSON-RPC)
+To‘lov va tranzaksiya holati
+SMS
+SMS provayder API (masalan, Eskiz)
+Tasdiqlash kodi va bildirishnomalar
+AI agent
+LLM API (backend orqali chaqiriladi)
+Tavsif yaxshilash, narx tavsiyasi, qidiruv yordami
+DevOps
+Docker, GitHub Actions (CI/CD), Swagger/OpenAPI
+Yetkazib berish va API hujjati
+Hosting
+Render / Railway yoki arzon VPS (tavsiya)
+Bepul yoki arzon o‘quv muhiti; yakuniy tanlov keyin
+10.2. Payme integratsiyasi
+Payme bilan integratsiya Payme Merchant API (JSON-RPC) asosida quriladi: backend tomonda to‘lovni tekshirish, yaratish, tasdiqlash va bekor qilish metodlari (CheckPerformTransaction, CreateTransaction, PerformTransaction, CancelTransaction, CheckTransaction) amalga oshiriladi. Payme bilan shartnoma va test (sandbox) muhiti jamoa tomonidan alohida rasmiylashtiriladi. Karta ma’lumotlari UMUM bazasida saqlanmaydi.
+11. Ma’lumotlar modeli
+Barcha jadvallarda id — int (butun son) turida bo‘lib, bazada avtomatik oshib boradi (IDENTITY/SERIAL). int taxminan 2,1 milliardgacha yozuvga yetadi, bu o‘quv loyihasi uchun yetarli.
+Entity
+Asosiy maydonlar
+Bog‘lanish
+User
+id, full_name, phone, email, password_hash, role, status, city, seller_profile_completed, created_at
+Bir foydalanuvchida ko‘p e‘lon, buyurtma va chat
+Category
+id, name, parent_id
+Ierarxik; bir kategoriyada ko‘p e‘lon
+Listing
+id, user_id, category_id, title, description, price, lat, lng, status, created_at
+Bitta foydalanuvchi va kategoriyaga tegishli
+ListingImage
+id, listing_id, url, position
+Bir e‘londa ko‘p rasm
+Favorite
+id, user_id, listing_id
+Foydalanuvchi va e‘lonni bog‘laydi
+Chat
+id, listing_id, buyer_id, seller_id
+E‘lon doirasida xaridor va sotuvchi o‘rtasida
+Message
+id, chat_id, sender_id, body, is_read, sent_at
+Bir chatda ko‘p xabar
+Order
+id, listing_id, buyer_id, amount, status
+E‘lon va xaridorga bog‘lanadi
+Payment
+id, order_id, payme_ref, amount, status
+Bir buyurtmada bir yoki bir nechta to‘lov urinishi
+Report
+id, user_id, listing_id, reason, status
+Shikoyat yuboruvchi va e‘longa bog‘lanadi
+Notification
+id, user_id, channel, body, sent_at
+Foydalanuvchiga yuborilgan xabarnomalar
+AuditLog
+id, actor_id, action, entity, created_at
+Muhim amallar jurnali
+11.1. Holatlar (statuslar)
+Obyekt
+Mumkin bo‘lgan holatlar
+Listing
+DRAFT, MODERATION, ACTIVE, REJECTED, ARCHIVED, SOLD
+Order
+PENDING, PAID, FAILED, CANCELLED, REFUNDED
+Payment
+CREATED, PERFORMED, CANCELLED, FAILED
+User (status)
+ACTIVE, BLOCKED
+User (rol)
+USER, ADMIN
+Report
+OPEN, REVIEWED, CLOSED
+11.2. ER diagramma
+UMUM platfo“rmasinig ER diagrammasi
+12. API endpointlar (REST)
+Quyida asosiy endpointlar keltirilgan. Barcha yo‘llar /api/v1 prefiksi bilan boshlanadi. To‘liq hujjat Swagger/OpenAPI orqali yuritiladi.
+Metod
+Yo‘l
+Tavsif
+Kirish
+POST
+/auth/request-code
+Telefonga SMS-kod yuborish
+Ochiq
+POST
+/auth/verify
+Kodni tekshirish, token olish
+Ochiq
+GET
+/users/me
+Joriy profilni olish
+Foydalanuvchi
+PUT
+/users/me
+Profilni yangilash
+Foydalanuvchi
+GET
+/categories
+Kategoriyalar daraxti
+Ochiq
+GET
+/listings
+Qidiruv va filtr (query parametrlar)
+Ochiq
+GET
+/listings/{id}
+E‘lon tafsilotlari
+Ochiq
+GET
+/listings/map
+Hudud bo‘yicha e‘lonlar (xarita)
+Ochiq
+POST
+/listings
+E‘lon yaratish
+Foydalanuvchi
+PUT
+/listings/{id}
+E‘lonni tahrirlash
+Egasi
+DELETE
+/listings/{id}
+E‘lonni arxivlash/o‘chirish
+Egasi
+POST
+/listings/{id}/images
+Rasm yuklash
+Egasi
+POST
+/favorites/{listingId}
+Sevimlilarga qo‘shish
+Foydalanuvchi
+DELETE
+/favorites/{listingId}
+Sevimlilardan olib tashlash
+Foydalanuvchi
+GET
+/chats
+Chatlar ro‘yxati
+Foydalanuvchi
+POST
+/chats
+E‘lon bo‘yicha chat boshlash
+Foydalanuvchi
+GET
+/chats/{id}/messages
+Chat xabarlari
+Ishtirokchi
+WS
+/ws/chat
+Real vaqtda xabar almashish
+Ishtirokchi
+POST
+/orders
+Buyurtma yaratish
+Foydalanuvchi
+GET
+/orders/{id}
+Buyurtma holati
+Egasi
+POST
+/payments/payme
+Payme callback (JSON-RPC)
+Payme
+POST
+/ai/improve-description
+Tavsifni yaxshilash
+Foydalanuvchi
+POST
+/ai/suggest-price
+Narx tavsiyasi
+Foydalanuvchi
+POST
+/reports
+Shikoyat yuborish
+Foydalanuvchi
+GET
+/moderation/listings
+Moderatsiya navbati
+Administrator
+PATCH
+/moderation/listings/{id}
+Tasdiqlash yoki rad etish
+Administrator
+GET
+/admin/users
+Foydalanuvchilar ro‘yxati
+Administrator
+PATCH
+/admin/users/{id}
+Rol/holatni o‘zgartirish
+Administrator
+GET
+/admin/stats
+Umumiy statistika
+Administrator
+13. Ekranlar ro‘yxati
+№
+Ekran
+Asosiy elementlar
+1
+Bosh sahifa
+Qidiruv satri, kategoriyalar, tavsiya etilgan e‘lonlar
+2
+Qidiruv natijalari
+Filtrlar, saralash, e‘lonlar ro‘yxati/xarita rejimi
+3
+E‘lon sahifasi
+Rasmlar, narx, tavsif, sotuvchi, xarita, “Yozish” va “To‘lash” tugmalari
+4
+Kirish / Ro‘yxatdan o‘tish
+Telefon raqami, SMS-kod kiritish
+5
+E‘lon qo‘shish
+Bosqichma-bosqich forma, rasm yuklash, joylashuvni xaritada tanlash, AI tugmasi
+6
+Mening e‘lonlarim
+Holatlar (faol, moderatsiyada, arxiv), tahrirlash
+7
+Sevimlilar
+Saqlangan e‘lonlar ro‘yxati
+8
+Chatlar
+Suhbatlar ro‘yxati va xabarlar oynasi
+9
+To‘lov
+Buyurtma xulosasi, Payme’ga o‘tish, natija ekrani
+10
+Profil va sozlamalar
+Shaxsiy ma’lumotlar, til, bildirishnomalar
+11
+Xarita ko‘rinishi
+E‘lon belgilari, hudud bo‘yicha qidiruv
+12
+AI yordamchi
+Matn kiritish va tavsiyalarni ko‘rish
+13
+Admin paneli
+Moderatsiya navbati, shikoyatlar, foydalanuvchilar, kategoriyalar, statistika, audit jurnali
+14. Foydalanuvchi hikoyalari va qabul mezonlari
+ID
+User Story
+Qabul mezoni
+US-01
+Foydalanuvchi sifatida, telefon raqamim bilan ro‘yxatdan o‘tmoqchiman, shunda e‘lon qo‘sha olaman.
+To‘g‘ri SMS-kod bilan akkaunt yaratiladi va tizimga kirish ishlaydi.
+US-02
+Xaridor sifatida, kalit so‘z va filtr bilan qidirmoqchiman, shunda kerakli e‘lonni tez topaman.
+Natijalar kategoriya, narx va shaharga mos bo‘ladi.
+US-03
+Xaridor sifatida, e‘lonni xaritada ko‘rmoqchiman, shunda yaqin atrofdagi takliflarni tanlayman.
+E‘lon belgilari xaritada to‘g‘ri joylashuvda ko‘rinadi.
+US-04
+Sotuvchi sifatida, e‘lon qo‘shmoqchiman, shunda mahsulotimni sotaman.
+E‘lon saqlanadi va moderatsiyaga yuboriladi.
+US-05
+Sotuvchi sifatida, AI e‘lon matnimni yaxshilashini xohlayman, shunda e‘lonim jozibali bo‘ladi.
+AI taklifi ko‘rsatiladi; foydalanuvchi qabul qilishi yoki rad etishi mumkin.
+US-06
+Xaridor sifatida, sotuvchiga yozmoqchiman, shunda narx va holat haqida kelishaman.
+Xabarlar real vaqtda yetkaziladi va saqlanadi.
+US-07
+Xaridor sifatida, Payme orqali to‘lamoqchiman, shunda xarid xavfsiz amalga oshadi.
+To‘lov tasdig‘i saqlanadi, buyurtma PAID bo‘ladi.
+US-08
+Foydalanuvchi sifatida, muhim voqealar haqida SMS olmoqchiman, shunda xabardor bo‘laman.
+SMS tasdiq kodi, to‘lov va moderatsiya natijasi uchun yuboriladi.
+US-09
+Foydalanuvchi sifatida, e‘lonlarni sevimlilarga saqlamoqchiman, shunda keyinroq qaytaman.
+Sevimlilar ro‘yxatida e‘lon paydo bo‘ladi va o‘chirilishi mumkin.
+US-10
+Administrator sifatida, yangi e‘lonlarni tekshirmoqchiman, shunda qoidabuzar e‘lonlar chiqmaydi.
+Tasdiqlangan e‘lon ACTIVE, rad etilgani sabab bilan REJECTED bo‘ladi.
+US-11
+Foydalanuvchi sifatida, shubhali e‘longa shikoyat yubormoqchiman.
+Shikoyat administrator navbatiga tushadi.
+US-12
+Administrator sifatida, statistikani ko‘rmoqchiman, shunda platforma holatini baholayman.
+E‘lonlar, foydalanuvchilar va to‘lovlar bo‘yicha hisobot ko‘rsatiladi.
+15. Cheklovlar va xavfsizlik
+Karta ma’lumotlari UMUM bazasida saqlanmaydi; to‘lov Payme tomonida amalga oshiriladi.
+Foydalanuvchi faqat o‘z e‘lonlari, buyurtmalari va chatlarini boshqara oladi; xodimlar rolga mos ruxsat doirasida ishlaydi (RBAC).
+Autentifikatsiya JWT orqali; SMS-kod urinishlari soni va yuborish chastotasi cheklanadi (rate limiting).
+Barcha kirish ma’lumotlari tekshiriladi (validatsiya) — SQL injection, XSS va CSRF xavflaridan himoya qilinadi.
+Yuklanadigan rasmlarning turi va hajmi tekshiriladi.
+Payme callback so‘rovlari autentifikatsiya qilinadi va takroriy so‘rovlar idempotent qayta ishlanadi.
+AI xizmatiga shaxsiy ma’lumotlar (telefon, parol) yuborilmaydi; AI natijasi foydalanuvchi tasdig‘isiz e‘longa qo‘llanmaydi.
+Buyurtma va to‘lov holatlari aniq statuslar bilan yuritiladi (PENDING, PAID, FAILED, CANCELLED, REFUNDED).
+Ushbu hujjat o‘quv loyihasi uchun tavsiya etilgan spetsifikatsiya; amaliy ishga tushirishdan oldin xavfsizlik, to‘lov va qonunchilik talablari (shu jumladan shaxsiy ma’lumotlar to‘g‘risidagi qonun) alohida tekshiriladi.
+16. Risklar
+№
+Risk
+Ehtimol
+Ta’sir
+Yengillashtirish chorasi
+R1
+Payme bilan shartnoma/test muhiti kechikishi
+O‘rta
+Yuqori
+Avval sandbox/mock to‘lov bilan ishlash, shartnomani erta boshlash
+R2
+Jamoa kichik (2 kishi), ish hajmi katta
+Yuqori
+Yuqori
+MVP doirasini qat‘iy ushlash, ustuvorlik bo‘yicha ishlash
+R3
+Backend (Java) va frontend integratsiyasida kechikish
+O‘rta
+O‘rta
+OpenAPI shartnomasini erta kelishish, mock server
+R4
+AI xizmati narxi yoki barqarorligi
+O‘rta
+Past
+AI ixtiyoriy funksiya sifatida; zaxira (qo‘lda) rejim
+R5
+SMS provayder xarajati/yetkazish kechikishi
+O‘rta
+O‘rta
+Test rejimi, kod urinishlariga limit
+R6
+Soxta/noqonuniy e‘lonlar
+Yuqori
+O‘rta
+Moderatsiya, shikoyat mexanizmi, taqiqlangan so‘zlar filtri
+R7
+Hosting uchun byudjet yo‘qligi
+Yuqori
+O‘rta
+Bepul/arzon tariflar, lokal Docker demo
+R8
+Muddatga ulgurmaslik (8 hafta)
+O‘rta
+Yuqori
+Haftalik nazorat, Could ustuvorlikdagi funksiyalarni keyinga qoldirish
+17. Sprint rejasi (8 hafta)
+Ishlab chiqish 4 ta ikki haftalik sprintga bo‘linadi. Reja dastlabki bo‘lib, har sprint boshida aniqlashtiriladi.
+Sprint
+Haftalar
+Maqsad
+Asosiy vazifalar
+Sprint 1
+1–2
+Poydevor va autentifikatsiya
+Loyiha tuzilmasi (Git, Docker, CI)
+PostgreSQL sxemasi va migratsiyalar
+SMS orqali ro‘yxatdan o‘tish/kirish (JWT)
+Frontend asos va navigatsiya
+Sprint 2
+3–4
+E‘lonlar va qidiruv
+Kategoriyalar va e‘lon CRUD
+Rasm yuklash
+Qidiruv va filtrlar
+Bosh sahifa va e‘lon sahifasi
+Sprint 3
+5–6
+Muloqot, xarita va to‘lov
+Real vaqt chat (WebSocket)
+Xarita integratsiyasi
+Payme integratsiyasi (sandbox)
+SMS bildirishnomalar
+Sprint 4
+7–8
+AI, moderatsiya va yakunlash
+AI agent (tavsif, narx)
+Moderatsiya va shikoyatlar, admin panel
+Testlash va xatolarni tuzatish
+Demo va hujjatni yakunlash
+18. Sinov rejasi
+Sinovlar uch darajada olib boriladi: birlik (unit) testlari, integratsiya testlari va qo‘lda (qabul) testlari. Quyida asosiy test holatlari keltirilgan.
+Test ID
+Sinov holati
+Kutilgan natija
+TC-01
+To‘g‘ri SMS-kod bilan ro‘yxatdan o‘tish
+Akkaunt yaratiladi va foydalanuvchi tizimga kiradi
+TC-02
+Noto‘g‘ri yoki muddati o‘tgan SMS-kod kiritish
+Xato ko‘rsatiladi, kirish rad etiladi
+TC-03
+To‘liq ma’lumot bilan e‘lon qo‘shish
+E‘lon MODERATSIYA holatida saqlanadi
+TC-04
+Majburiy maydonsiz e‘lon yuborish
+Tizim saqlashga yo‘l qo‘ymaydi, maydon belgilanadi
+TC-05
+Mavjud bo‘lmagan kalit so‘z bilan qidirish
+“E‘lon topilmadi” xabari ko‘rsatiladi
+TC-06
+Chatda xabar yuborish
+Xabar real vaqtda qabul qiluvchiga yetadi va saqlanadi
+TC-07
+Payme orqali muvaffaqiyatli to‘lov
+Buyurtma PAID bo‘ladi, SMS yuboriladi
+TC-08
+Muvaffaqiyatsiz to‘lov
+Buyurtma tasdiqlanmaydi, FAILED holatida qoladi
+TC-09
+Payme callback’ining takroriy yuborilishi
+To‘lov faqat bir marta hisobga olinadi
+TC-10
+Boshqa foydalanuvchi e‘lonini tahrirlashga urinish
+Kirish rad etiladi (403)
+TC-11
+Oddiy foydalanuvchining admin sahifasiga kirishi
+Kirish rad etiladi va hodisa jurnalga yoziladi
+TC-12
+AI xizmati ishlamaganda e‘lon qo‘shish
+Foydalanuvchi qo‘lda davom eta oladi
+19. Xulosa
+UMUM — e‘lonlarni joylash, qidirish, xaritada ko‘rish, chat orqali bog‘lanish va Payme orqali to‘lashni yagona platformada birlashtiradigan loyiha. Ushbu hujjat loyiha talablarini, rollarni, Use Case va UML modellarini, arxitekturani, ma’lumotlar modelini, API ro‘yxatini, risklarni, 8 haftalik sprint rejasini va sinov ssenariylarini belgilaydi.
+Hujjat keyingi 8 haftalik ishlab chiqish bosqichi uchun asos bo‘lib xizmat qiladi va sprintlar davomida zarurat bo‘lsa yangilab boriladi.
+Tayyorlaganlar: Sharafiddinov Saloxiddin, Hasanov Ibrohim  •  DI-1-25  •  2026
+20. Ilova: Atamalar lug‘ati
+Atama
+Ma’nosi
+Scrum
+Ishni qisqa bosqichlarga (sprintlarga) bo‘lib bajarish usuli. Jamoa har bosqich oxirida tayyor natija ko‘rsatadi.
+Sprint
+Scrumdagi qisqa ish davri (bizda 2 hafta). Shu vaqt ichida belgilangan vazifalar bajariladi.
+Product Owner
+Mahsulot egasi: nima qurilishini va qaysi funksiya birinchi bo‘lishini hal qiladi.
+Scrum Master
+Jarayonni yo‘lga qo‘yuvchi va jamoa ishiga to‘sqinlik qiluvchi narsalarni olib tashlovchi.
+Sprint Planning
+Sprint boshida: bu 2 haftada nimalar qilinishini tanlash uchun uchrashuv.
+Daily Scrum
+Har kungi qisqa uchrashuv: kecha nima qildim, bugun nima qilaman, qanday to‘siq bor.
+Sprint Review
+Sprint oxirida tayyor natijani namoyish qilish.
+Sprint Retrospective
+Sprint oxirida: nima yaxshi bo‘ldi, nimani yaxshilash kerak — xulosa qilish.
+Backlog
+Bajarilishi kerak bo‘lgan vazifalar va talablar ro‘yxati, ustuvorlik bo‘yicha tartiblangan.
+MVP
+Eng kerakli funksiyalar bilan tayyorlangan birinchi ishlaydigan versiya.
+SRS / PRD
+Dastur nima qilishi kerakligini batafsil yozadigan talablar hujjati.
+Aktor
+Tizim bilan ishlovchi shaxs yoki tashqi tizim (masalan, Mehmon, Foydalanuvchi, Payme).
+Use Case
+Foydalanish holati: aktor tizimda nimaga erishmoqchi (masalan, “E‘lon qo‘shish”).
+UML
+Tizimni rasm (diagramma) bilan tasvirlash uchun yagona belgilar tili.
+Class diagramma
+Dasturdagi asosiy obyektlar (klasslar), ularning maydonlari, amallari va bog‘lanishlari.
+Sequence diagramma
+Bir jarayonda tizim qismlari bir-biriga qaysi tartibda xabar yuborishini ko‘rsatadi.
+Activity diagramma
+Jarayonning qadamlari va qarorlar (ha/yo‘q) tarmoqlari ketma-ketligi.
+ER diagramma
+Ma’lumotlar bazasidagi jadvallar va ular orasidagi bog‘lanishlar sxemasi.
+PK / FK
+PK (Primary Key) — jadvaldagi yozuvning noyob raqami (id). FK (Foreign Key) — boshqa jadval yozuviga havola.
+API / Endpoint
+API — frontend backend bilan gaplashadigan qoidalar to‘plami. Endpoint — shu API ichidagi bitta manzil (masalan, /listings).
+REST
+API yozishning keng tarqalgan usuli: GET (olish), POST (yaratish), PUT (yangilash), DELETE (o‘chirish).
+JWT
+Tizimga kirgan foydalanuvchini keyingi so‘rovlarda tanib turuvchi xavfsiz kirish tokeni.
+Ierarxik kategoriya
+Ichma-ich (daraxt) kategoriyalar: masalan, Transport → Avtomobillar → Yengil avtomobillar.
+Moderatsiya
+E‘lonlarni e‘lon qilishdan oldin qoidalarga mosligini tekshirish.
+Idempotent
+Bir xil so‘rov takror kelsa ham natija bir marta hisobga olinishi (masalan, to‘lov ikki marta yechilmaydi).
+Status (holat)
+Obyektning hozirgi bosqichi: masalan, e‘lon MODERATSIYA → ACTIVE.

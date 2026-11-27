@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}SMS Kodni Tasdiqlash — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="text-center mb-4">
+                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex p-3 mb-2">
+                        <i class="fas fa-key fs-2 text-warning"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">SMS kodni kiriting</h3>
+                    <p class="text-secondary small">
+                        <strong>{{ phone }}</strong> raqamiga yuborilgan 6 xonali tasdiqlash kodini kiriting
+                    </p>
+                </div>
+
+                <form method="post" action="{% url 'auth_verify' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+                    {% csrf_token %}
+                    {{ form.phone }}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-center w-100">{{ form.code.label }}</label>
+                        {{ form.code }}
+                        {% if form.code.errors %}
+                            <div class="text-danger small mt-1 text-center">{{ form.code.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold rounded-3 shadow-sm text-dark">
+                        Tasdiqlash va Kirish <i class="fas fa-check-circle ms-1"></i>
+                    </button>
+                </form>
+
+                <div class="text-center mt-3">
+                    <a href="{% url 'auth_login' %}" class="text-decoration-none small text-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Raqamni o‘zgartirish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

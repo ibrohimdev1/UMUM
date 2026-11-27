@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ listing.title }} — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'listing_list' %}?category={{ listing.category.id }}">{{ listing.category.name }}</a></li>
+            <li class="breadcrumb-item active text-truncate" style="max-width: 300px;">{{ listing.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Main details -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <!-- Image Slider -->
+                <div id="listingCarousel" class="carousel slide rounded-3 overflow-hidden mb-4 bg-dark text-center position-relative" data-bs-ride="carousel">
+                    <!-- AKSIYA Promo Badge -->
+                    {% include 'components/aksiya_badge.html' %}
+
+                    <div class="carousel-inner" style="max-height: 480px;">
+                        {% for img in listing.images.all %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <img src="{{ img.file_url }}" class="d-block w-100 object-fit-contain" style="height: 450px;" alt="{{ listing.title }}">
+                            </div>
+                        {% empty %}
+                            <div class="carousel-item active">
+                                <img src="/static/images/no-image.svg" class="d-block w-100" style="height: 450px;" alt="No image">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if listing.images.count > 1 %}
+                        <button class="carousel-control-prev" type="button" data-bs-target="#listingCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#listingCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h2 class="fw-bold mb-2">{{ listing.title }}</h2>
+                        <div class="text-secondary small">
+                            <i class="fas fa-map-marker-alt text-danger me-1"></i>{{ listing.city|default:'O‘zbekiston' }} &bull;
+                            <i class="far fa-clock ms-2 me-1"></i>{{ listing.created_at|date:"d M Y, H:i" }} &bull;
+                            <i class="far fa-eye ms-2 me-1"></i>{{ listing.views_count }} marta ko‘rildi
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        {% if listing.old_price %}
+                            <div class="text-decoration-line-through text-muted small">{{ listing.old_price|floatformat:0 }} UZS</div>
+                        {% endif %}
+                        <h2 class="fw-bold text-primary mb-0">{{ listing.price|floatformat:0 }} UZS</h2>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Description -->
+                <h5 class="fw-bold mb-3">Tavsif</h5>
+                <div class="text-secondary lh-lg mb-4" style="white-space: pre-line;">
+                    {{ listing.description }}
+                </div>
+
+                <!-- Map Location -->
+                {% if listing.lat and listing.lng %}
+                    <h5 class="fw-bold mb-3"><i class="fas fa-map-pin text-danger me-2"></i>Joylashuv xaritasi</h5>
+                    <div id="detailMap" style="height: 280px;" class="rounded-3 shadow-sm mb-2"></div>
+                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i>Aniq manzil: {{ listing.address|default:listing.city }}</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar Actions & Seller Info -->
+        <div class="col-lg-4">
+            <!-- Price and Buy Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 sticky-top" style="top: 80px;">
+                {% if listing.is_promotion %}
+                    <div class="mb-2">
+                        <span class="badge rounded-pill px-3 py-1 fw-bold text-white shadow-sm" style="background: #7000FF; font-size: 0.78rem; letter-spacing: 0.5px;">
+                            <i class="fas fa-tag me-1"></i> {{ listing.promotion_text|default:'AKSIYA' }}
+                        </span>
+                    </div>
+                {% endif %}
+                {% if listing.old_price %}
+                    <div class="text-decoration-line-through text-muted mb-1">{{ listing.old_price|floatformat:0 }} UZS</div>
+                {% endif %}
+                <h3 class="fw-bold text-primary mb-3">{{ listing.price|floatformat:0 }} UZS</h3>
+
+                <div class="d-grid gap-2 mb-4">
+                    <!-- Buy via Payme -->
+                    <a href="{% url 'payment_checkout' listing.id %}" class="btn btn-success btn-lg fw-bold rounded-pill shadow-sm">
+                        <i class="fas fa-credit-card me-2"></i> Payme orqali sotib olish
+                    </a>
+
+                    <!-- Start Chat -->
+                    <a href="{% url 'chat_start' listing.id %}" class="btn btn-primary btn-lg fw-bold rounded-pill shadow-sm">
+                        <i class="fas fa-comments me-2"></i> Sotuvchiga yozish
+                    </a>
+
+                    <!-- Favorite button -->
+                    <form action="{% url 'favorite_toggle' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger w-100 rounded-pill">
+                            <i class="fas fa-heart me-1"></i> Sevimlilarga saqlash
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Seller Profile Card -->
+                <div class="border-top pt-3">
+                    <h6 class="fw-bold text-dark mb-3">Sotuvchi ma‘lumotlari</h6>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle p-3 me-3">
+                            <i class="fas fa-user fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">{{ listing.user.full_name|default:listing.user.phone }}</h6>
+                            <small class="text-success"><i class="fas fa-check-circle me-1"></i>Tasdiqlangan sotuvchi</small>
+                        </div>
+                    </div>
+                    <div class="bg-light p-3 rounded-3 text-center mb-2">
+                        <small class="text-secondary d-block mb-1">Bog‘lanish telefoni:</small>
+                        <a href="tel:{{ listing.user.phone }}" class="fw-bold fs-5 text-decoration-none text-dark">
+                            <i class="fas fa-phone-alt me-1 text-primary"></i> {{ listing.user.phone }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+{% if listing.lat and listing.lng %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const lat = {{ listing.lat }};
+        const lng = {{ listing.lng }};
+        const map = L.map('detailMap').setView([lat, lng], 14);
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; <a href="https://www.esri.com">Esri</a> Street Map',
+            maxZoom: 19
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map).bindPopup('<b>{{ listing.title|escapejs }}</b><br>{{ listing.price|floatformat:0 }} UZS').openPopup();
+    });
+</script>
+{% endif %}
+{% endblock %}

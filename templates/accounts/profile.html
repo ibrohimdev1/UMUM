@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Profil Sozlamalari — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h3 class="fw-bold mb-1"><i class="fas fa-user-cog text-primary me-2"></i>Mening Profilim</h3>
+                <p class="text-secondary small mb-4">Shaxsiy ma‘lumotlaringizni tahrirlang</p>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Telefon raqam</label>
+                        <input type="text" class="form-control" value="{{ user.phone }}" disabled>
+                        <div class="form-text">Telefon raqam o‘zgarmas hisoblanadi.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">To‘liq ismingiz</label>
+                        {{ form.full_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email manzilingiz</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Shahar / Viloyat</label>
+                        {{ form.city }}
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Profil rasmi</label>
+                        {{ form.avatar }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary px-4 py-2 fw-bold rounded-pill">
+                        Saqlash <i class="fas fa-save ms-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

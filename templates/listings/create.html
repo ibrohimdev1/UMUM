@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Yangi e‘lon qo‘shish — UMUM{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="fw-bold mb-1"><i class="fas fa-plus-circle text-primary me-2"></i>Yangi e‘lon joylash</h3>
+                        <p class="text-secondary small mb-0">E‘loningiz moderatsiyadan so‘ng faoliyat boshlaydi (FR-15)</p>
+                    </div>
+                    <a href="{% url 'ai_assistant_page' %}" class="btn btn-outline-info btn-sm rounded-pill" target="_blank">
+                        <i class="fas fa-magic me-1"></i> AI Yordamchi
+                    </a>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Sarlavha *</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Kategoriya *</label>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Narx (UZS) *</label>
+                            {{ form.price }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Shahar / Tuman *</label>
+                            {{ form.city }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Rasmlar yuklash</label>
+                        <input type="file" name="images" class="form-control" multiple accept="image/*">
+                        <div class="form-text">Bir nechta rasm tanlashingiz mumkin.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label fw-semibold mb-0">Tavsif *</label>
+                            <button type="button" id="btnAiImprove" class="btn btn-sm btn-link text-decoration-none">
+                                <i class="fas fa-magic me-1"></i> AI bilan boyitish
+                            </button>
+                        </div>
+                        {{ form.description }}
+                    </div>
+
+                    <!-- Location on Map -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold"><i class="fas fa-map-marked-alt text-danger me-1"></i>Xaritadan joylashuvni belgilang</label>
+                        <div id="pickerMap" style="height: 300px;" class="rounded-3 shadow-sm mb-2"></div>
+                        <small class="text-muted">Xaritaning kerakli nuqtasiga bosing (marker avtomatik qo‘yiladi).</small>
+                        {{ form.lat }}
+                        {{ form.lng }}
+                        <div class="mt-2">
+                            {{ form.address }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100 py-3 fw-bold rounded-pill text-dark shadow-sm">
+                        E‘lonni moderatsiyaga yuborish <i class="fas fa-paper-plane ms-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Default to Tashkent coordinates
+        const defaultLat = 41.311081;
+        const defaultLng = 69.240562;
+        const map = L.map('pickerMap').setView([defaultLat, defaultLng], 12);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; <a href="https://www.esri.com">Esri</a> Street Map',
+            maxZoom: 19
+        }).addTo(map);
+
+        let marker = null;
+        map.on('click', function(e) {
+            const lat = e.latlng.lat;
+            const lng = e.latlng.lng;
+            document.getElementById('id_lat').value = lat;
+            document.getElementById('id_lng').value = lng;
+
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map);
+            }
+        });
+
+        // AI improve helper button
+        document.getElementById('btnAiImprove').addEventListener('click', async function() {
+            const title = document.getElementById('id_title').value;
+            const desc = document.getElementById('id_description').value;
+            if (!title) {
+                alert("Iltimos, avval e‘lon sarlavhasini kiriting.");
+                return;
+            }
+            const btn = this;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yaxshilanmoqda...';
+            try {
+                const res = await fetch('/api/v1/ai/improve-description', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title, raw_description: desc })
+                });
+                const data = await res.json();
+                if (data.improved_description) {
+                    document.getElementById('id_description').value = data.improved_description;
+                }
+            } catch(e) {
+                console.error(e);
+            } finally {
+                btn.innerHTML = '<i class="fas fa-magic me-1"></i> AI bilan boyitish';
+            }
+        });
+    });
+</script>
+{% endblock %}
