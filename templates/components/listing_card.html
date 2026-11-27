@@ -21,11 +21,11 @@
     <div class="card-body p-3 d-flex flex-column">
         {% if listing.old_price %}
             <div class="d-flex align-items-baseline gap-2 mb-1 flex-wrap">
-                <h5 class="fw-bold text-primary mb-0">{{ listing.price|floatformat:0 }} UZS</h5>
-                <span class="text-decoration-line-through text-muted small">{{ listing.old_price|floatformat:0 }} UZS</span>
+                <h5 class="fw-bold text-primary mb-0">{{ listing.formatted_price }} UZS</h5>
+                <span class="text-decoration-line-through text-muted small">{{ listing.formatted_old_price }} UZS</span>
             </div>
         {% else %}
-            <h5 class="fw-bold text-primary mb-1">{{ listing.price|floatformat:0 }} UZS</h5>
+            <h5 class="fw-bold text-primary mb-1">{{ listing.formatted_price }} UZS</h5>
         {% endif %}
         <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none text-dark">
             <h6 class="card-title fw-semibold text-truncate mb-2" title="{{ listing.title }}">{{ listing.title }}</h6>

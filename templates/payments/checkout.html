@@ -46,7 +46,7 @@
                     </div>
                     <div class="d-flex justify-content-between fs-5 fw-bold text-primary pt-2 border-top">
                         <span>Jami summa:</span>
-                        <span>{{ order.amount|floatformat:0 }} UZS</span>
+                        <span>{{ order.formatted_amount }} UZS</span>
                     </div>
                 </div>
 
@@ -103,7 +103,7 @@
                     <!-- Submit Demo Payment -->
                     <div class="d-grid gap-2">
                         <button type="submit" id="btnSubmitPayment" class="btn btn-success btn-lg fw-bold py-3 rounded-pill shadow-sm">
-                            <i class="fas fa-check-circle me-2"></i> Demo to‘lovni tasdiqlash ({{ order.amount|floatformat:0 }} UZS)
+                            <i class="fas fa-check-circle me-2"></i> Demo to‘lovni tasdiqlash ({{ order.formatted_amount }} UZS)
                         </button>
                         <a href="{% url 'listing_detail' listing.id %}" class="btn btn-outline-secondary rounded-pill py-2">
                             Bekor qilish

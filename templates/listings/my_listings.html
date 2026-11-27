@@ -39,7 +39,7 @@
                                     {{ item.title }}
                                 </a>
                             </td>
-                            <td class="fw-bold text-primary">{{ item.price|floatformat:0 }} UZS</td>
+                            <td class="fw-bold text-primary">{{ item.formatted_price }} UZS</td>
                             <td>{{ item.category.name }}</td>
                             <td>
                                 {% if item.status == 'ACTIVE' %}

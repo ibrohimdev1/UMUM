@@ -11,23 +11,29 @@ class ListingImageSerializer(serializers.ModelSerializer):
 class ListingListSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     primary_image = serializers.CharField(source='primary_image_url', read_only=True)
+    formatted_price = serializers.CharField(read_only=True)
+    formatted_old_price = serializers.CharField(read_only=True)
 
     class Meta:
         model = Listing
         fields = [
-            'id', 'title', 'price', 'old_price', 'is_promotion', 'promotion_text',
-            'city', 'category', 'primary_image', 'status', 'views_count', 'created_at'
+            'id', 'title', 'price', 'formatted_price', 'old_price', 'formatted_old_price',
+            'is_promotion', 'promotion_text', 'city', 'category', 'primary_image',
+            'status', 'views_count', 'created_at'
         ]
 
 class ListingDetailSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
     images = ListingImageSerializer(many=True, read_only=True)
+    formatted_price = serializers.CharField(read_only=True)
+    formatted_old_price = serializers.CharField(read_only=True)
 
     class Meta:
         model = Listing
         fields = [
-            'id', 'title', 'description', 'price', 'category',
+            'id', 'title', 'description', 'price', 'formatted_price',
+            'old_price', 'formatted_old_price', 'category',
             'lat', 'lng', 'city', 'address', 'status',
             'views_count', 'user', 'images', 'created_at'
         ]

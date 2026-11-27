@@ -59,6 +59,24 @@ class Listing(models.Model):
         return f"{self.title} - {self.price} UZS ({self.get_status_display()})"
 
     @property
+    def formatted_price(self):
+        try:
+            val = int(round(float(self.price)))
+            return f"{val:,}".replace(",", " ")
+        except (ValueError, TypeError):
+            return f"{self.price}"
+
+    @property
+    def formatted_old_price(self):
+        if not self.old_price:
+            return ""
+        try:
+            val = int(round(float(self.old_price)))
+            return f"{val:,}".replace(",", " ")
+        except (ValueError, TypeError):
+            return f"{self.old_price}"
+
+    @property
     def primary_image_url(self):
         first_img = self.images.order_by('position', 'id').first()
         if first_img and first_img.image:

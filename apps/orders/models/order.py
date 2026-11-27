@@ -38,5 +38,13 @@ class Order(models.Model):
         verbose_name_plural = _('Buyurtmalar')
         ordering = ['-created_at']
 
+    @property
+    def formatted_amount(self):
+        try:
+            val = int(round(float(self.amount)))
+            return f"{val:,}".replace(",", " ")
+        except (ValueError, TypeError):
+            return f"{self.amount}"
+
     def __str__(self):
         return f"Order #{self.id}: {self.listing.title} - {self.amount} UZS ({self.get_status_display()})"

@@ -60,7 +60,7 @@
                         <div style="max-width: 200px;">
                             <img src="${item.primary_image}" style="width: 100%; height: 110px; object-fit: cover; border-radius: 6px;" class="mb-2">
                             <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">${item.title}</h6>
-                            <div class="text-primary fw-bold mb-2">${Math.round(item.price)} UZS</div>
+                            <div class="text-primary fw-bold mb-2">${Number(item.price).toLocaleString('ru-RU')} UZS</div>
                             <a href="/listings/${item.id}/" class="btn btn-primary btn-sm w-100 rounded-pill text-white py-1" style="font-size: 0.8rem;">Ko‘rish</a>
                         </div>
                     `;

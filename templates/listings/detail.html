@@ -54,9 +54,9 @@
                     </div>
                     <div class="text-end">
                         {% if listing.old_price %}
-                            <div class="text-decoration-line-through text-muted small">{{ listing.old_price|floatformat:0 }} UZS</div>
+                            <div class="text-decoration-line-through text-muted small">{{ listing.formatted_old_price }} UZS</div>
                         {% endif %}
-                        <h2 class="fw-bold text-primary mb-0">{{ listing.price|floatformat:0 }} UZS</h2>
+                        <h2 class="fw-bold text-primary mb-0">{{ listing.formatted_price }} UZS</h2>
                     </div>
                 </div>
 
@@ -89,9 +89,9 @@
                     </div>
                 {% endif %}
                 {% if listing.old_price %}
-                    <div class="text-decoration-line-through text-muted mb-1">{{ listing.old_price|floatformat:0 }} UZS</div>
+                    <div class="text-decoration-line-through text-muted mb-1">{{ listing.formatted_old_price }} UZS</div>
                 {% endif %}
-                <h3 class="fw-bold text-primary mb-3">{{ listing.price|floatformat:0 }} UZS</h3>
+                <h3 class="fw-bold text-primary mb-3">{{ listing.formatted_price }} UZS</h3>
 
                 <div class="d-grid gap-2 mb-4">
                     <!-- Buy via Payme -->
@@ -149,7 +149,7 @@
             attribution: '&copy; <a href="https://www.esri.com">Esri</a> Street Map',
             maxZoom: 19
         }).addTo(map);
-        L.marker([lat, lng]).addTo(map).bindPopup('<b>{{ listing.title|escapejs }}</b><br>{{ listing.price|floatformat:0 }} UZS').openPopup();
+        L.marker([lat, lng]).addTo(map).bindPopup('<b>{{ listing.title|escapejs }}</b><br>{{ listing.formatted_price }} UZS').openPopup();
     });
 </script>
 {% endif %}
