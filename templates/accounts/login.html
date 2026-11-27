@@ -187,11 +187,11 @@
     }
 
     .req-list li.unmet {
-        color: #ef4444;
+        color: #64748b;
     }
 
     .req-list li.met {
-        color: #10b981;
+        color: #16a34a;
         font-weight: 600;
     }
 </style>
@@ -306,10 +306,10 @@
                 <div class="bg-light p-3 rounded-3 mb-3 border">
                     <small class="text-dark fw-semibold d-block mb-1" style="font-size: 11.5px;">Parol quyidagilarni o‘z ichiga olishi kerak:</small>
                     <ul class="req-list mb-0">
-                        <li id="reqLength" class="unmet"><span class="icon">—</span> kamida 9 ta belgi;</li>
-                        <li id="reqUpper" class="unmet"><span class="icon">—</span> bosh harf;</li>
-                        <li id="reqLower" class="unmet"><span class="icon">—</span> kichik harf;</li>
-                        <li id="reqNumber" class="unmet"><span class="icon">—</span> kamida bitta raqam.</li>
+                        <li id="reqLength" class="unmet"><span class="icon">•</span> kamida 9 ta belgi;</li>
+                        <li id="reqUpper" class="unmet"><span class="icon">•</span> bosh harf;</li>
+                        <li id="reqLower" class="unmet"><span class="icon">•</span> kichik harf;</li>
+                        <li id="reqNumber" class="unmet"><span class="icon">•</span> kamida bitta raqam.</li>
                     </ul>
                 </div>
 
@@ -388,7 +388,7 @@
             icon.textContent = '✓';
         } else {
             element.className = 'unmet';
-            icon.textContent = '—';
+            icon.textContent = '•';
         }
     }
 
